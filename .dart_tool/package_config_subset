@@ -78,6 +78,10 @@ collection
 2.12
 file:///home/taggu/.flutter_install/flutter/.pub-cache/hosted/pub.dartlang.org/collection-1.16.0/
 file:///home/taggu/.flutter_install/flutter/.pub-cache/hosted/pub.dartlang.org/collection-1.16.0/lib/
+color
+2.12
+file:///home/taggu/.flutter_install/flutter/.pub-cache/hosted/pub.dartlang.org/color-3.0.0/
+file:///home/taggu/.flutter_install/flutter/.pub-cache/hosted/pub.dartlang.org/color-3.0.0/lib/
 convert
 2.12
 file:///home/taggu/.flutter_install/flutter/.pub-cache/hosted/pub.dartlang.org/convert-3.0.2/
@@ -98,6 +102,10 @@ dartz
 2.12
 file:///home/taggu/.flutter_install/flutter/.pub-cache/hosted/pub.dartlang.org/dartz-0.10.1/
 file:///home/taggu/.flutter_install/flutter/.pub-cache/hosted/pub.dartlang.org/dartz-0.10.1/lib/
+easy_color_picker
+2.12
+file:///home/taggu/.flutter_install/flutter/.pub-cache/hosted/pub.dartlang.org/easy_color_picker-1.0.0/
+file:///home/taggu/.flutter_install/flutter/.pub-cache/hosted/pub.dartlang.org/easy_color_picker-1.0.0/lib/
 equatable
 2.12
 file:///home/taggu/.flutter_install/flutter/.pub-cache/hosted/pub.dartlang.org/equatable-2.0.3/
@@ -130,6 +138,10 @@ flutter_material_color_picker
 2.12
 file:///home/taggu/.flutter_install/flutter/.pub-cache/hosted/pub.dartlang.org/flutter_material_color_picker-1.1.0+2/
 file:///home/taggu/.flutter_install/flutter/.pub-cache/hosted/pub.dartlang.org/flutter_material_color_picker-1.1.0+2/lib/
+fluttericon
+2.12
+file:///home/taggu/.flutter_install/flutter/.pub-cache/hosted/pub.dartlang.org/fluttericon-2.0.0/
+file:///home/taggu/.flutter_install/flutter/.pub-cache/hosted/pub.dartlang.org/fluttericon-2.0.0/lib/
 frontend_server_client
 2.12
 file:///home/taggu/.flutter_install/flutter/.pub-cache/hosted/pub.dartlang.org/frontend_server_client-2.1.3/

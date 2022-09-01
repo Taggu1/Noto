@@ -8,7 +8,7 @@ class RemoveNoteUseCase {
 
   RemoveNoteUseCase({required this.repository});
 
-  Future<Either<Failure, Unit>> call({required String noteId}) async {
-    return await repository.removeNote(noteId: noteId);
+  Future<Either<Failure, Unit>> call({required int noteIndex}) async {
+    return await repository.removeNote(noteIndex: noteIndex);
   }
 }

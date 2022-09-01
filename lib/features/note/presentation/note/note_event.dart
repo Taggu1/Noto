@@ -32,11 +32,11 @@ class EditOrAddNoteEvent extends NoteEvent {
 }
 
 class RemoveNoteEvent extends NoteEvent {
-  final String noteId;
+  final int noteIndex;
 
-  const RemoveNoteEvent({required this.noteId});
+  const RemoveNoteEvent({required this.noteIndex});
 
   @override
   // TODO: implement props
-  List<Object> get props => [noteId];
+  List<Object> get props => [noteIndex];
 }

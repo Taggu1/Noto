@@ -122,6 +122,12 @@
       "languageVersion": "2.12"
     },
     {
+      "name": "color",
+      "rootUri": "file:///home/taggu/.flutter_install/flutter/.pub-cache/hosted/pub.dartlang.org/color-3.0.0",
+      "packageUri": "lib/",
+      "languageVersion": "2.12"
+    },
+    {
       "name": "convert",
       "rootUri": "file:///home/taggu/.flutter_install/flutter/.pub-cache/hosted/pub.dartlang.org/convert-3.0.2",
       "packageUri": "lib/",
@@ -148,6 +154,12 @@
     {
       "name": "dartz",
       "rootUri": "file:///home/taggu/.flutter_install/flutter/.pub-cache/hosted/pub.dartlang.org/dartz-0.10.1",
+      "packageUri": "lib/",
+      "languageVersion": "2.12"
+    },
+    {
+      "name": "easy_color_picker",
+      "rootUri": "file:///home/taggu/.flutter_install/flutter/.pub-cache/hosted/pub.dartlang.org/easy_color_picker-1.0.0",
       "packageUri": "lib/",
       "languageVersion": "2.12"
     },
@@ -216,6 +228,12 @@
       "rootUri": "file:///home/taggu/.flutter_install/flutter/packages/flutter_web_plugins",
       "packageUri": "lib/",
       "languageVersion": "2.17"
+    },
+    {
+      "name": "fluttericon",
+      "rootUri": "file:///home/taggu/.flutter_install/flutter/.pub-cache/hosted/pub.dartlang.org/fluttericon-2.0.0",
+      "packageUri": "lib/",
+      "languageVersion": "2.12"
     },
     {
       "name": "frontend_server_client",
@@ -632,7 +650,7 @@
       "languageVersion": "2.17"
     }
   ],
-  "generated": "2022-09-01T09:24:13.936546Z",
+  "generated": "2022-09-01T13:12:37.561417Z",
   "generator": "pub",
   "generatorVersion": "2.18.0"
 }

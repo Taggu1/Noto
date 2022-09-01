@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_material_color_picker/flutter_material_color_picker.dart';
 import 'package:note_app/core/constants/theme_constants.dart';
+import 'package:note_app/core/utils/color_utils.dart';
 import 'package:note_app/core/utils/string.dart';
 import 'package:note_app/features/note/data/repositories/note_repository_impl.dart';
 import 'package:note_app/features/note/domain/entities/note.dart';
@@ -15,6 +16,7 @@ import 'package:painter/painter.dart';
 import '../../../../core/widgets/custom_iconbutton_widget.dart';
 import 'custom_text_field.dart';
 import 'drawing_widget.dart';
+import 'form_widget.dart';
 
 class EditAddNotePage extends StatefulWidget {
   static const routeName = "/edit-add-note-page";
@@ -32,7 +34,7 @@ class _EditAddNotePageState extends State<EditAddNotePage> {
   bool? isAdd;
   int? noteIndex;
   bool _loaded = false;
-  Color color = Colors.red;
+  Color color = getRandomColor();
   String dt = DateTime.now().toIso8601String();
   String id = DateTime.now().microsecondsSinceEpoch.toString();
   Uint8List? oldDrawing;
@@ -129,13 +131,21 @@ class _EditAddNotePageState extends State<EditAddNotePage> {
         },
       ),
       actions: [
+        if (isAdd == true)
+          CustomIconButton(
+            onPressed: () {
+              _add();
+            },
+            icon: Icons.add,
+            buttonColor: Colors.green,
+          ),
         CustomIconButton(
             onPressed: () {
               setState(() {
                 withDrawing = !withDrawing;
               });
             },
-            icon: Icons.draw)
+            icon: Icons.draw),
       ],
     );
   }
@@ -149,47 +159,10 @@ class _EditAddNotePageState extends State<EditAddNotePage> {
           ),
         Expanded(
           child: SingleChildScrollView(
-            child: Form(
-                key: _formKey,
-                child: Column(
-                  children: [
-                    CustomTextField(
-                      controller: _titleController,
-                      hintText: 'Title',
-                      maxLines: 1,
-                      alignLabelWithHint: false,
-                      validator: (value) {
-                        if (value == null || value.isEmpty) {
-                          return 'Please Enter Some text';
-                        }
-                        return null;
-                      },
-                    ),
-                    CustomTextField(
-                      controller: _bodyController,
-                      hintText: 'type something...',
-                      maxLines: 8,
-                      alignLabelWithHint: true,
-                      validator: (value) {
-                        if (value == null || value.isEmpty) {
-                          return 'Please Enter Some text';
-                        }
-                        return null;
-                      },
-                    ),
-                    MaterialColorPicker(
-                      onColorChange: (newColor) {
-                        color = newColor;
-                      },
-                      selectedColor: color,
-                    ),
-                    if (isAdd == true)
-                      ElevatedButton(
-                        onPressed: _add,
-                        child: const Text("add"),
-                      ),
-                  ],
-                )),
+            child: FormWidget(
+                formKey: _formKey,
+                titleController: _titleController,
+                bodyController: _bodyController),
           ),
         ),
       ],

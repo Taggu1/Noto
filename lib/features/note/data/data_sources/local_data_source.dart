@@ -6,7 +6,7 @@ import 'package:note_app/features/note/domain/entities/note.dart';
 abstract class NoteLocalDataSource {
   Future<List<Note>> fetchNotes();
   Future<Unit> editNote({required Note note, required int index});
-  Future<Unit> removeNote({required String noteId});
+  Future<Unit> removeNote({required int index});
   Future<Unit> addNote({required Note note});
   Future<Unit> reOrederNotes({required List<Note> notes});
 }
@@ -42,8 +42,8 @@ class NoteLocalDataSourceImpl implements NoteLocalDataSource {
   }
 
   @override
-  Future<Unit> removeNote({required String noteId}) {
-    hiveBox.delete(noteId);
+  Future<Unit> removeNote({required int index}) {
+    hiveBox.deleteAt(index);
     return Future.value(unit);
   }
 

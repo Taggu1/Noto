@@ -46,6 +46,9 @@ dependencies:
   shared_preferences: ^2.0.15
   xen_popup_card: ^0.0.1
   painter: ^2.0.0
+  fluttericon: ^2.0.0
+  color: ^3.0.0
+  easy_color_picker: ^1.0.0
 dev_dependencies:
   flutter_lints: ^2.0.0
   flutter_test:

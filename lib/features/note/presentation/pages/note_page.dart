@@ -13,26 +13,36 @@ import '../../../../core/widgets/custom_iconbutton_widget.dart';
 import '../../domain/entities/note.dart';
 import '../note/note_bloc.dart';
 
-class NotePage extends StatelessWidget {
+class NotePage extends StatefulWidget {
   final int index;
   static const routeName = '/note-page';
   const NotePage({Key? key, required this.index}) : super(key: key);
 
   @override
+  State<NotePage> createState() => _NotePageState();
+}
+
+class _NotePageState extends State<NotePage> {
+  bool deleted = false;
+
+  @override
   Widget build(BuildContext context) {
-    return BlocBuilder<NoteBloc, NoteState>(
-      builder: (context, state) {
-        if (state is LoadedNoteState) {
-          return Scaffold(
-            backgroundColor: kBlackColor,
-            appBar: _buildAppBar(context, state.notes[index], index),
-            body: _buildBody(state.notes[index]),
-          );
-        } else {
-          return LoadingWidget();
-        }
-      },
-    );
+    return !deleted
+        ? BlocBuilder<NoteBloc, NoteState>(
+            builder: (context, state) {
+              if (state is LoadedNoteState) {
+                return Scaffold(
+                  backgroundColor: kBlackColor,
+                  appBar: _buildAppBar(
+                      context, state.notes[widget.index], widget.index),
+                  body: _buildBody(state.notes[widget.index]),
+                );
+              } else {
+                return LoadingWidget();
+              }
+            },
+          )
+        : Container();
   }
 
   Padding _buildBody(Note note) {
@@ -93,6 +103,19 @@ class NotePage extends StatelessWidget {
           },
         ),
         actions: [
+          CustomIconButton(
+            icon: Icons.delete,
+            buttonColor: Colors.red,
+            onPressed: () {
+              setState(() {
+                deleted = true;
+              });
+              BlocProvider.of<NoteBloc>(context)
+                  .add(RemoveNoteEvent(noteIndex: index));
+              BlocProvider.of<NoteBloc>(context).add(FetchNotesEvent());
+              Navigator.of(context).pop();
+            },
+          ),
           CustomIconButton(
             icon: Icons.edit,
             onPressed: () {

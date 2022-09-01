@@ -41,7 +41,10 @@ class NoteBloc extends Bloc<NoteEvent, NoteState> {
           final notesOrFailure = await fetchNotesUseCase();
           emit(_notesOrFailureToNoteState(notesOrFailure));
         } else if (event is ReOrderNotesEvent) {
-          final unitOrFailure = reOrderNotesUseCase(notes: event.notes);
+          reOrderNotesUseCase(notes: event.notes);
+        } else if (event is RemoveNoteEvent) {
+          final deleteOrFailure =
+              await removeNoteUseCase(noteIndex: event.noteIndex);
         }
       },
     );
