@@ -1,0 +1,4 @@
+#Wed Aug 31 17:53:59 EET 2022
+base.0=/run/media/taggu/65BF785D3B511E22/Projectss/80-project-challenge/note_app/build/app/intermediates/dex/debug/mergeDexDebug/classes.dex
+renamed.0=classes.dex
+path.0=classes.dex
