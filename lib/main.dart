@@ -3,7 +3,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hive/hive.dart';
 import 'package:note_app/features/note/domain/entities/note.dart';
 import 'package:note_app/features/note/presentation/note/note_bloc.dart';
-import 'package:note_app/features/note/presentation/pages/note_page.dart';
 import 'package:note_app/features/note/presentation/pages/notes_page.dart';
 import 'package:note_app/features/note/presentation/widgets/add_note_popup_card.dart';
 import 'package:path_provider/path_provider.dart';
@@ -14,7 +13,7 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   final dir = await getApplicationDocumentsDirectory();
 
-  Hive.init(dir.path + "/notes/");
+  Hive.init("${dir.path}/notes/");
 
   Hive.registerAdapter(NoteAdapter());
 
@@ -38,11 +37,11 @@ class MyApp extends StatelessWidget {
       ],
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
-        title: 'Note app',
+        title: 'Noto',
         theme: ThemeData.dark(),
         routes: {
           '/': (ctx) => const NotesPage(),
-          EditAddNotePage.routeName: (ctx) => EditAddNotePage()
+          EditAddNotePage.routeName: (ctx) => const EditAddNotePage()
         },
       ),
     );
