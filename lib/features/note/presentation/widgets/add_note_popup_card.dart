@@ -38,6 +38,7 @@ class _EditAddNotePageState extends State<EditAddNotePage> {
   String dt = DateTime.now().toIso8601String();
   String id = DateTime.now().microsecondsSinceEpoch.toString();
   Uint8List? oldDrawing;
+  bool? canScrool;
   late PainterController _painterController;
 
   @override
@@ -45,7 +46,7 @@ class _EditAddNotePageState extends State<EditAddNotePage> {
     super.initState();
     _painterController = PainterController()
       ..thickness = 5.0
-      ..backgroundColor = Colors.white
+      ..backgroundColor = kBlackColor
       ..drawColor = Colors.teal;
   }
 
@@ -153,18 +154,29 @@ class _EditAddNotePageState extends State<EditAddNotePage> {
   Widget _buildBody() {
     return Column(
       children: [
-        if (withDrawing)
-          DrawingWidget(
-            painterController: _painterController,
+        if (withDrawing) ...[
+          FormWidget(
+            formKey: _formKey,
+            titleController: _titleController,
+            withBody: false,
           ),
-        Expanded(
-          child: SingleChildScrollView(
-            child: FormWidget(
+          Expanded(
+            child: DrawingWidget(
+              painterController: _painterController,
+            ),
+          ),
+        ],
+        if (!withDrawing)
+          Expanded(
+            child: SingleChildScrollView(
+              child: FormWidget(
                 formKey: _formKey,
                 titleController: _titleController,
-                bodyController: _bodyController),
+                bodyController: _bodyController,
+                withBody: true,
+              ),
+            ),
           ),
-        ),
       ],
     );
   }

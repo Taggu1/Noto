@@ -7,7 +7,8 @@ class FormWidget extends StatelessWidget {
     Key? key,
     required GlobalKey<FormState> formKey,
     required TextEditingController titleController,
-    required TextEditingController bodyController,
+    TextEditingController? bodyController,
+    required this.withBody,
   })  : _formKey = formKey,
         _titleController = titleController,
         _bodyController = bodyController,
@@ -15,7 +16,8 @@ class FormWidget extends StatelessWidget {
 
   final GlobalKey<FormState> _formKey;
   final TextEditingController _titleController;
-  final TextEditingController _bodyController;
+  final TextEditingController? _bodyController;
+  final bool withBody;
 
   @override
   Widget build(BuildContext context) {
@@ -35,18 +37,19 @@ class FormWidget extends StatelessWidget {
                 return null;
               },
             ),
-            CustomTextField(
-              controller: _bodyController,
-              hintText: 'type something...',
-              maxLines: 8,
-              alignLabelWithHint: true,
-              validator: (value) {
-                if (value == null || value.isEmpty) {
-                  return 'Please Enter Some text';
-                }
-                return null;
-              },
-            ),
+            if (withBody)
+              CustomTextField(
+                controller: _bodyController!,
+                hintText: 'type something...',
+                maxLines: 8,
+                alignLabelWithHint: true,
+                validator: (value) {
+                  if (value == null || value.isEmpty) {
+                    return 'Please Enter Some text';
+                  }
+                  return null;
+                },
+              ),
           ],
         ));
   }

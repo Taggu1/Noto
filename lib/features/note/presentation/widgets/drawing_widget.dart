@@ -2,11 +2,13 @@ import 'dart:math';
 
 import 'package:easy_color_picker/easy_color_picker.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttericon/entypo_icons.dart';
+import 'package:fluttericon/typicons_icons.dart';
 import 'package:note_app/core/widgets/custom_iconbutton_widget.dart';
 import 'package:painter/painter.dart';
 import 'package:fluttericon/font_awesome5_icons.dart';
 
-class DrawingWidget extends StatelessWidget {
+class DrawingWidget extends StatefulWidget {
   final PainterController painterController;
   const DrawingWidget({
     super.key,
@@ -14,35 +16,61 @@ class DrawingWidget extends StatelessWidget {
   });
 
   @override
+  State<DrawingWidget> createState() => _DrawingWidgetState();
+}
+
+class _DrawingWidgetState extends State<DrawingWidget> {
+  bool canScroll = false;
+  double drawingPlattehight = 600;
+  @override
   Widget build(BuildContext context) {
     final Size size = MediaQuery.of(context).size;
-    return Padding(
-      padding: const EdgeInsets.all(18),
-      child: size.width > 800
-          ? Column(children: [
-              DrawingActionsRaw(
-                painterController: painterController,
-              ),
-              Container(
-                color: Colors.white,
-                width: size.width,
-                height: 300,
-                child: Painter(painterController),
-              ),
-            ])
-          : Stack(
+    return Stack(
+      children: [
+        SingleChildScrollView(
+          physics: canScroll
+              ? const AlwaysScrollableScrollPhysics()
+              : const NeverScrollableScrollPhysics(),
+          child: Padding(
+            padding: const EdgeInsets.only(top: 18),
+            child: Column(
               children: [
-                Container(
-                  color: Colors.white,
-                  width: size.width,
-                  height: size.height * 0.6,
-                  child: Painter(painterController),
-                ),
                 DrawingActionsRaw(
-                  painterController: painterController,
+                  painterController: widget.painterController,
+                ),
+                Container(
+                  width: size.width,
+                  height: drawingPlattehight,
+                  child: Painter(widget.painterController),
                 ),
               ],
             ),
+          ),
+        ),
+        Positioned(
+          bottom: 10,
+          left: 10,
+          child: CustomIconButton(
+              onPressed: () {
+                setState(() {
+                  canScroll = !canScroll;
+                });
+              },
+              icon: canScroll ? FontAwesome5.scroll : Typicons.edit),
+        ),
+        Positioned(
+          bottom: 10,
+          right: 10,
+          child: CustomIconButton(
+              onPressed: () {
+                print("s");
+                setState(() {
+                  drawingPlattehight += 300;
+                });
+              },
+              icon: Icons.add),
+        ),
+      ],
     );
   }
 }
@@ -77,7 +105,7 @@ class _DrawingActionsRawState extends State<DrawingActionsRaw> {
                 widget.painterController.eraseMode = eraseMode;
               });
             },
-            icon: eraseMode ? Icons.delete_outlined : Icons.draw_outlined,
+            icon: eraseMode ? FontAwesome5.eraser : FontAwesome5.pencil_alt,
           ),
           CustomIconButton(
             onPressed: () {

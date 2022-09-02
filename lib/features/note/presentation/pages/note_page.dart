@@ -46,47 +46,42 @@ class _NotePageState extends State<NotePage> {
   }
 
   Padding _buildBody(Note note) {
+    final bool withDrawing = note.drawing != null ? true : false;
     return Padding(
       padding: const EdgeInsets.all(20),
       child: SingleChildScrollView(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            if (note.drawing != null)
-              Container(
-                color: Colors.white,
-                child: Image.memory(note.drawing!),
-              ),
-            Text(
-              note.title!,
-              style: GoogleFonts.roboto(
-                color: kWhiteColor,
-                fontWeight: FontWeight.w700,
-                fontSize: 30,
-              ),
+            NoteTitleText(
+              title: note.title!,
             ),
             const SizedBox(
               height: 20,
             ),
-            Text(
-              note.time!.toFormatedDate(),
-              style: GoogleFonts.roboto(
-                color: Colors.grey,
-                fontSize: 15,
-              ),
+            NoteDateText(
+              time: note.time!,
             ),
             const SizedBox(
               height: 20,
             ),
-            Text(
-              note.body!,
-              style: GoogleFonts.roboto(
-                color: kWhiteColor,
-                fontWeight: FontWeight.w300,
-                fontSize: 17,
-                height: 1.8,
+            if (withDrawing)
+              SingleChildScrollView(
+                child: Container(
+                  color: Colors.white,
+                  child: Image.memory(note.drawing!),
+                ),
               ),
-            ),
+            if (!withDrawing)
+              Text(
+                note.body!,
+                style: GoogleFonts.roboto(
+                  color: kWhiteColor,
+                  fontWeight: FontWeight.w300,
+                  fontSize: 17,
+                  height: 1.8,
+                ),
+              ),
           ],
         ),
       ),
@@ -125,4 +120,40 @@ class _NotePageState extends State<NotePage> {
           ),
         ],
       );
+}
+
+class NoteDateText extends StatelessWidget {
+  final String time;
+  const NoteDateText({Key? key, required this.time}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Text(
+      time.toFormatedDate(),
+      style: GoogleFonts.roboto(
+        color: Colors.grey,
+        fontSize: 15,
+      ),
+    );
+  }
+}
+
+class NoteTitleText extends StatelessWidget {
+  final String title;
+  const NoteTitleText({
+    Key? key,
+    required this.title,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Text(
+      title,
+      style: GoogleFonts.roboto(
+        color: kWhiteColor,
+        fontWeight: FontWeight.w700,
+        fontSize: 30,
+      ),
+    );
+  }
 }
