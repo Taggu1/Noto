@@ -5,8 +5,9 @@ import 'package:flutter/material.dart';
 import 'package:fluttericon/entypo_icons.dart';
 import 'package:fluttericon/typicons_icons.dart';
 import 'package:note_app/core/widgets/custom_iconbutton_widget.dart';
-import 'package:painter/painter.dart';
 import 'package:fluttericon/font_awesome5_icons.dart';
+
+import '../../../../core/painter/painter.dart';
 
 class DrawingWidget extends StatefulWidget {
   final PainterController painterController;
@@ -41,7 +42,7 @@ class _DrawingWidgetState extends State<DrawingWidget> {
                 Container(
                   width: size.width,
                   height: drawingPlattehight,
-                  child: Painter(widget.painterController),
+                  child: Painter(widget.painterController, !canScroll),
                 ),
               ],
             ),
@@ -51,24 +52,30 @@ class _DrawingWidgetState extends State<DrawingWidget> {
           bottom: 10,
           left: 10,
           child: CustomIconButton(
-              onPressed: () {
-                setState(() {
+            onPressed: () {
+              setState(
+                () {
                   canScroll = !canScroll;
-                });
-              },
-              icon: canScroll ? FontAwesome5.scroll : Typicons.edit),
+                },
+              );
+            },
+            icon: canScroll ? FontAwesome5.scroll : Typicons.edit,
+          ),
         ),
         Positioned(
           bottom: 10,
           right: 10,
           child: CustomIconButton(
-              onPressed: () {
-                print("s");
-                setState(() {
+            onPressed: () {
+              print("s");
+              setState(
+                () {
                   drawingPlattehight += 300;
-                });
-              },
-              icon: Icons.add),
+                },
+              );
+            },
+            icon: Icons.add,
+          ),
         ),
       ],
     );

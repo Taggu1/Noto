@@ -32,7 +32,7 @@ class FormWidget extends StatelessWidget {
               alignLabelWithHint: false,
               validator: (value) {
                 if (value == null || value.isEmpty) {
-                  return 'Please Enter Some text';
+                  return 'Please Enter a Title';
                 }
                 return null;
               },
@@ -45,7 +45,7 @@ class FormWidget extends StatelessWidget {
                 alignLabelWithHint: true,
                 validator: (value) {
                   if (value == null || value.isEmpty) {
-                    return 'Please Enter Some text';
+                    return 'Please Enter a Body';
                   }
                   return null;
                 },

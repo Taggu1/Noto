@@ -11,7 +11,9 @@ class AddOrEditNoteUseCase {
   AddOrEditNoteUseCase({required this.repository});
 
   Future<Either<Failure, Unit>> call(
-      {required Note note, required FunType addOrEdit, int? index}) async {
+      {required Note note,
+      required NoteFunctionType addOrEdit,
+      int? index}) async {
     return await repository.addOrEditNote(
         note: note, funcType: addOrEdit, index: index);
   }

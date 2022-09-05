@@ -12,7 +12,7 @@ abstract class NoteLocalDataSource {
 }
 
 class NoteLocalDataSourceImpl implements NoteLocalDataSource {
-  final Box<Note> hiveBox;
+  Box<Note> hiveBox;
 
   NoteLocalDataSourceImpl({required this.hiveBox});
   @override
@@ -36,21 +36,38 @@ class NoteLocalDataSourceImpl implements NoteLocalDataSource {
   }
 
   @override
-  Future<List<Note>> fetchNotes() {
-    return Future.value(
-        hiveBox.values.where((element) => element.id != null).toList());
+  Future<List<Note>> fetchNotes() async {
+    if (!hiveBox.isOpen) {
+      hiveBox = await Hive.openBox("notes");
+    }
+    try {
+      return Future.value(
+          hiveBox.values.where((element) => element.id != null).toList());
+    } catch (e) {
+      print(e);
+      throw DatabaseException();
+    }
   }
 
   @override
   Future<Unit> removeNote({required int index}) {
-    hiveBox.deleteAt(index);
-    return Future.value(unit);
+    try {
+      hiveBox.deleteAt(index);
+      return Future.value(unit);
+    } catch (e) {
+      throw DatabaseException();
+    }
   }
 
   @override
   Future<Unit> reOrederNotes({required List<Note> notes}) async {
-    await hiveBox.clear();
-    await hiveBox.addAll(notes);
-    return Future.value(unit);
+    try {
+      await hiveBox.clear();
+      await hiveBox.addAll(notes);
+
+      return Future.value(unit);
+    } catch (e) {
+      throw DatabaseException();
+    }
   }
 }

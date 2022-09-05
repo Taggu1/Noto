@@ -4,19 +4,17 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_material_color_picker/flutter_material_color_picker.dart';
 import 'package:note_app/core/constants/theme_constants.dart';
 import 'package:note_app/core/utils/color_utils.dart';
 import 'package:note_app/core/utils/string.dart';
 import 'package:note_app/features/note/data/repositories/note_repository_impl.dart';
 import 'package:note_app/features/note/domain/entities/note.dart';
 import 'package:note_app/features/note/presentation/note/note_bloc.dart';
-import 'package:painter/painter.dart';
 
+import '../../../../core/painter/painter.dart';
 import '../../../../core/widgets/custom_iconbutton_widget.dart';
-import 'custom_text_field.dart';
-import 'drawing_widget.dart';
-import 'form_widget.dart';
+import '../widgets/drawing_widget.dart';
+import '../widgets/form_widget.dart';
 
 class EditAddNotePage extends StatefulWidget {
   static const routeName = "/edit-add-note-page";
@@ -29,17 +27,19 @@ class EditAddNotePage extends StatefulWidget {
 class _EditAddNotePageState extends State<EditAddNotePage> {
   final _titleController = TextEditingController();
   final _bodyController = TextEditingController();
-
-  bool withDrawing = false;
-  bool? isAdd;
-  int? noteIndex;
-  bool _loaded = false;
-  Color color = getRandomColor();
+  late PainterController _painterController;
   String dt = DateTime.now().toIso8601String();
   String id = DateTime.now().microsecondsSinceEpoch.toString();
+  Color color = getRandomColor();
+
+  bool withDrawing = false;
+  bool _loaded = false;
+
+  bool? isAdd;
+  int? noteIndex;
   Uint8List? oldDrawing;
   bool? canScrool;
-  late PainterController _painterController;
+  Uint8List? drawing;
 
   @override
   void initState() {
@@ -54,7 +54,7 @@ class _EditAddNotePageState extends State<EditAddNotePage> {
   void didChangeDependencies() {
     if (_loaded == false) {
       final args = ModalRoute.of(context)!.settings.arguments as List;
-      isAdd = args[0] as bool;
+      isAdd = args.first as bool;
       if (args.length > 1) {
         noteIndex = args.last;
       }
@@ -62,7 +62,9 @@ class _EditAddNotePageState extends State<EditAddNotePage> {
         final state = BlocProvider.of<NoteBloc>(context).state;
         if (state is LoadedNoteState) {
           final note = state.notes[noteIndex!];
-          print(noteIndex);
+          if (note.points != null) {
+            _painterController.setOldPaint(note.points!);
+          }
           _titleController.text = note.title!;
           _bodyController.text = note.body!;
 
@@ -80,7 +82,6 @@ class _EditAddNotePageState extends State<EditAddNotePage> {
   final _formKey = GlobalKey<FormState>();
 
   void _add() async {
-    Uint8List? drawing;
     if (withDrawing) {
       final drawinfDetails = _painterController.finish();
 
@@ -88,20 +89,16 @@ class _EditAddNotePageState extends State<EditAddNotePage> {
     }
     if (_formKey.currentState!.validate()) {
       final Note newNote = Note(
-          title: _titleController.text,
-          body: _bodyController.text,
-          id: id,
-          time: dt,
-          color: color.toString(),
-          drawing: withDrawing != false ? drawing : oldDrawing);
-      BlocProvider.of<NoteBloc>(context).add(
-        EditOrAddNoteEvent(
-            note: newNote,
-            addOrEdit: isAdd == false ? FunType.edit : FunType.add,
-            index: isAdd == false ? noteIndex! : null),
+        title: _titleController.text,
+        body: _bodyController.text,
+        id: id,
+        time: dt,
+        color: color.toString(),
+        drawing: withDrawing != false ? drawing : oldDrawing,
+        points:
+            withDrawing != false ? _painterController.getMapOfOffsets() : null,
       );
-      BlocProvider.of<NoteBloc>(context).add(FetchNotesEvent());
-      Navigator.of(context).pop();
+      _sendDataToNoteBloc(newNote);
     }
   }
 
@@ -141,12 +138,15 @@ class _EditAddNotePageState extends State<EditAddNotePage> {
             buttonColor: Colors.green,
           ),
         CustomIconButton(
-            onPressed: () {
-              setState(() {
+          onPressed: () {
+            setState(
+              () {
                 withDrawing = !withDrawing;
-              });
-            },
-            icon: Icons.draw),
+              },
+            );
+          },
+          icon: Icons.draw,
+        ),
       ],
     );
   }
@@ -179,5 +179,17 @@ class _EditAddNotePageState extends State<EditAddNotePage> {
           ),
       ],
     );
+  }
+
+  _sendDataToNoteBloc(Note newNote) {
+    BlocProvider.of<NoteBloc>(context).add(
+      EditOrAddNoteEvent(
+          note: newNote,
+          addOrEdit:
+              isAdd == false ? NoteFunctionType.edit : NoteFunctionType.add,
+          index: isAdd == false ? noteIndex! : null),
+    );
+    BlocProvider.of<NoteBloc>(context).add(FetchNotesEvent());
+    Navigator.of(context).pop();
   }
 }

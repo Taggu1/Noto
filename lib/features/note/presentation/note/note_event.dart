@@ -20,14 +20,13 @@ class ReOrderNotesEvent extends NoteEvent {
 
 class EditOrAddNoteEvent extends NoteEvent {
   final Note note;
-  final FunType addOrEdit;
+  final NoteFunctionType addOrEdit;
   final int? index;
 
   const EditOrAddNoteEvent(
       {required this.note, required this.addOrEdit, this.index});
 
   @override
-  // TODO: implement props
   List<Object> get props => [note, addOrEdit];
 }
 
@@ -37,6 +36,5 @@ class RemoveNoteEvent extends NoteEvent {
   const RemoveNoteEvent({required this.noteIndex});
 
   @override
-  // TODO: implement props
   List<Object> get props => [noteIndex];
 }

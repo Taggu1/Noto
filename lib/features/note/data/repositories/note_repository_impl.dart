@@ -5,7 +5,7 @@ import 'package:note_app/core/errors/failures.dart';
 import 'package:dartz/dartz.dart';
 import 'package:note_app/features/note/domain/repositories/note_repository.dart';
 
-enum FunType {
+enum NoteFunctionType {
   add,
   edit,
 }
@@ -41,11 +41,13 @@ class NoteRepositoryImpl implements NotesRepository {
 
   @override
   Future<Either<Failure, Unit>> addOrEditNote(
-      {required Note note, required FunType funcType, int? index}) async {
+      {required Note note,
+      required NoteFunctionType funcType,
+      int? index}) async {
     try {
       Unit response;
       switch (funcType) {
-        case FunType.edit:
+        case NoteFunctionType.edit:
           response = await localDataSource.editNote(note: note, index: index!);
           break;
         default:

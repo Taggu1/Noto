@@ -7,7 +7,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
 import 'package:note_app/core/constants/theme_constants.dart';
 import 'package:note_app/features/note/presentation/pages/note_page.dart';
-import 'package:note_app/features/note/presentation/widgets/add_note_popup_card.dart';
+import 'package:note_app/features/note/presentation/pages/edit_add_note_page.dart';
 
 import '../../domain/entities/note.dart';
 import '../../../../core/utils/string.dart';

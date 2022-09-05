@@ -2,6 +2,7 @@ import 'package:equatable/equatable.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
+import 'package:note_app/core/models/hive_offset.dart';
 
 part 'note.g.dart';
 
@@ -25,15 +26,18 @@ class Note extends Equatable with HiveObjectMixin {
   @HiveField(5)
   final Uint8List? drawing;
 
-  Note({
-    required this.title,
-    required this.body,
-    required this.id,
-    required this.time,
-    required this.color,
-    this.drawing
-  });
+  @HiveField(6)
+  final Map<HiveOffset, List<HiveOffset>>? points;
+
+  Note(
+      {required this.title,
+      required this.body,
+      required this.id,
+      required this.time,
+      required this.color,
+      this.drawing,
+      this.points});
 
   @override
-  List<Object?> get props => [title, body, id, time, color];
+  List<Object?> get props => [title, body, id, time, color, drawing, points];
 }

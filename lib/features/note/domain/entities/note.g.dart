@@ -23,13 +23,15 @@ class NoteAdapter extends TypeAdapter<Note> {
       time: fields[3] as String?,
       color: fields[4] as String?,
       drawing: fields[5] as Uint8List?,
+      points: (fields[6] as Map?)?.map((dynamic k, dynamic v) =>
+          MapEntry(k as HiveOffset, (v as List).cast<HiveOffset>())),
     );
   }
 
   @override
   void write(BinaryWriter writer, Note obj) {
     writer
-      ..writeByte(6)
+      ..writeByte(7)
       ..writeByte(0)
       ..write(obj.title)
       ..writeByte(1)
@@ -41,7 +43,9 @@ class NoteAdapter extends TypeAdapter<Note> {
       ..writeByte(4)
       ..write(obj.color)
       ..writeByte(5)
-      ..write(obj.drawing);
+      ..write(obj.drawing)
+      ..writeByte(6)
+      ..write(obj.points);
   }
 
   @override

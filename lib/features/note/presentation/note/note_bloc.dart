@@ -19,12 +19,12 @@ class NoteBloc extends Bloc<NoteEvent, NoteState> {
   final RemoveNoteUseCase removeNoteUseCase;
   final AddOrEditNoteUseCase addOrEditNoteUseCase;
   final ReOrderNotesUseCase reOrderNotesUseCase;
-  NoteBloc(
-      {required this.fetchNotesUseCase,
-      required this.removeNoteUseCase,
-      required this.addOrEditNoteUseCase,
-      required this.reOrderNotesUseCase})
-      : super(NoteInitial()) {
+  NoteBloc({
+    required this.fetchNotesUseCase,
+    required this.removeNoteUseCase,
+    required this.addOrEditNoteUseCase,
+    required this.reOrderNotesUseCase,
+  }) : super(NoteInitial()) {
     on<NoteEvent>(
       (event, emit) async {
         if (event is FetchNotesEvent) {
@@ -43,8 +43,7 @@ class NoteBloc extends Bloc<NoteEvent, NoteState> {
         } else if (event is ReOrderNotesEvent) {
           reOrderNotesUseCase(notes: event.notes);
         } else if (event is RemoveNoteEvent) {
-          final deleteOrFailure =
-              await removeNoteUseCase(noteIndex: event.noteIndex);
+          await removeNoteUseCase(noteIndex: event.noteIndex);
         }
       },
     );
@@ -55,14 +54,6 @@ class NoteBloc extends Bloc<NoteEvent, NoteState> {
     return notesOrFailure.fold(
       (failure) => const ErrorNotesState(message: "TestMessage"),
       (notes) => LoadedNoteState(notes: notes),
-    );
-  }
-
-  NoteState _addOrDeleteOrRemoveOrFailure(
-      Either<Failure, Unit> addOrDeleteOrRemove) {
-    return addOrDeleteOrRemove.fold(
-      (failure) => ErrorNotesState(message: "TestMessage"),
-      (success) => state,
     );
   }
 }
