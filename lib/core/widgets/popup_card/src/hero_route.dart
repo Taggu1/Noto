@@ -1,5 +1,4 @@
 // NOTE: Most of the credit for this code goes to 'funwithflutter' on GitHub
-import 'dart:ui';
 
 import 'package:flutter/material.dart';
 

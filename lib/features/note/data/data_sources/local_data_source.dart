@@ -8,7 +8,7 @@ abstract class NoteLocalDataSource {
   Future<Unit> editNote({required Note note, required int index});
   Future<Unit> removeNote({required int index});
   Future<Unit> addNote({required Note note});
-  Future<Unit> reOrederNotes({required List<Note> notes});
+  Future<Unit> reOrderNotes({required List<Note> notes});
 }
 
 class NoteLocalDataSourceImpl implements NoteLocalDataSource {
@@ -60,7 +60,7 @@ class NoteLocalDataSourceImpl implements NoteLocalDataSource {
   }
 
   @override
-  Future<Unit> reOrederNotes({required List<Note> notes}) async {
+  Future<Unit> reOrderNotes({required List<Note> notes}) async {
     try {
       await hiveBox.clear();
       await hiveBox.addAll(notes);

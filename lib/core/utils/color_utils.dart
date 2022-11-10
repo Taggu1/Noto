@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 import '../constants/colors.dart';
 
 Color getRandomColor() {
-  final _random = new Random();
+  final random = Random();
 
-  return noteCollors[_random.nextInt(noteCollors.length)];
+  return noteCollors[random.nextInt(noteCollors.length)];
 }

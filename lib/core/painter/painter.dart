@@ -7,6 +7,7 @@ import 'dart:ui';
 
 import 'package:flutter/material.dart' hide Image;
 import 'package:note_app/core/models/hive_offset.dart';
+import 'package:note_app/core/utils/string.dart';
 
 /// A very simple widget that supports drawing using touch.
 class Painter extends StatefulWidget {
@@ -63,7 +64,8 @@ class _PainterState extends State<Painter> {
   void _onPanStart(DragStartDetails start) {
     Offset pos = (context.findRenderObject() as RenderBox)
         .globalToLocal(start.globalPosition);
-    widget.painterController._pathHistory.add(pos);
+    widget.painterController._pathHistory
+        .add(pos, color: widget.painterController._drawColor);
     widget.painterController._notifyListeners();
   }
 
@@ -97,11 +99,12 @@ class _PainterPainter extends CustomPainter {
 }
 
 class _PathHistory {
-  List<MapEntry<Path, Paint>> _paths;
-  Map<HiveOffset, List<HiveOffset>> _points;
+  //TODO: wut
+  final List<MapEntry<Path, Paint>> _paths;
+  final Map<HiveOffset, Map<String, dynamic>> _points;
   Offset _lastStartingPoint;
   Paint currentPaint;
-  Paint _backgroundPaint;
+  final Paint _backgroundPaint;
   bool _inDrag;
 
   bool get isEmpty => _paths.isEmpty || (_paths.length == 1 && _inDrag);
@@ -123,20 +126,26 @@ class _PathHistory {
 
   void undo() {
     if (!_inDrag) {
+      _points.remove(_points.keys.last);
       _paths.removeLast();
     }
   }
 
   void clear() {
     if (!_inDrag) {
+      _points.clear();
       _paths.clear();
     }
   }
 
-  void add(Offset startPoint) {
+  void add(Offset startPoint, {Color? color}) {
     if (!_inDrag) {
       _lastStartingPoint = startPoint;
-      _points[startPoint.toHiveOffset()] = [];
+      final point = startPoint.toHiveOffset();
+      _points[point] = {};
+      _points[point]!["pointsList"] = [];
+      _points[point]!["color"] = color.toString();
+
       _inDrag = true;
       Path path = Path();
       path.moveTo(startPoint.dx, startPoint.dy);
@@ -146,7 +155,7 @@ class _PathHistory {
 
   void updateCurrent(Offset nextPoint) {
     if (_inDrag) {
-      _points[_lastStartingPoint]!.add(nextPoint.toHiveOffset());
+      _points[_lastStartingPoint]!["pointsList"].add(nextPoint.toHiveOffset());
       Path path = _paths.last.key;
       path.lineTo(nextPoint.dx, nextPoint.dy);
     }
@@ -202,8 +211,8 @@ class PictureDetails {
 
 /// Used with a [Painter] widget to control drawing.
 class PainterController extends ChangeNotifier {
-  Color _drawColor = Color.fromARGB(255, 0, 0, 0);
-  Color _backgroundColor = Color.fromARGB(255, 255, 255, 255);
+  Color _drawColor = const Color.fromARGB(255, 0, 0, 0);
+  Color _backgroundColor = const Color.fromARGB(255, 255, 255, 255);
   bool _eraseMode = false;
 
   double _thickness = 1.0;
@@ -259,7 +268,7 @@ class PainterController extends ChangeNotifier {
     Paint paint = Paint();
     if (_eraseMode) {
       paint.blendMode = BlendMode.clear;
-      paint.color = Color.fromARGB(0, 255, 0, 0);
+      paint.color = const Color.fromARGB(0, 255, 0, 0);
     } else {
       paint.color = drawColor;
       paint.blendMode = BlendMode.srcOver;
@@ -271,11 +280,13 @@ class PainterController extends ChangeNotifier {
     notifyListeners();
   }
 
-  void setOldPaint(Map<HiveOffset, List<HiveOffset>> offsets) {
+  void setOldPaint(Map<HiveOffset, Map<String, dynamic>> offsets) {
     offsets.forEach((startingPoint, nextPoints) {
-      _pathHistory.add(startingPoint);
-      for (int i = 0; i < nextPoints.length; i++) {
-        _pathHistory.updateCurrent(nextPoints[i]);
+      final color = (nextPoints["color"] as String).toMaterialColor();
+      drawColor = color;
+      _pathHistory.add(startingPoint, color: color);
+      for (int i = 0; i < nextPoints["pointsList"].length; i++) {
+        _pathHistory.updateCurrent(nextPoints["pointsList"][i]);
       }
       _pathHistory.endCurrent();
     });
@@ -322,7 +333,7 @@ class PainterController extends ChangeNotifier {
     return _cached!;
   }
 
-  Map<HiveOffset, List<HiveOffset>> getMapOfOffsets() {
+  Map<HiveOffset, Map<String, dynamic>> getMapOfOffsets() {
     return _pathHistory._points;
   }
 

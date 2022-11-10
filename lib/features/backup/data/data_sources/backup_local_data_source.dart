@@ -1,12 +1,9 @@
 import 'dart:io';
 
 import 'package:dartz/dartz.dart';
-import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
 import 'package:note_app/features/backup/domain/entities/backup_data.dart';
 import '../../../note/domain/entities/note.dart';
-import '../../../../injection_container.dart' as di;
-import '../../../note/presentation/note/note_bloc.dart';
 
 abstract class BackupLocalDataSource {
   Unit backup({required BackUpData backUpData});

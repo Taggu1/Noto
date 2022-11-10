@@ -38,3 +38,16 @@ class RemoveNoteEvent extends NoteEvent {
   @override
   List<Object> get props => [noteIndex];
 }
+
+class SearchNoteEvent extends NoteEvent {
+  final String searchText;
+  final List<Note> notes;
+
+  const SearchNoteEvent({
+    required this.searchText,
+    required this.notes,
+  });
+
+  @override
+  List<Object> get props => [searchText];
+}

@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:bloc/bloc.dart';
 import 'package:dartz/dartz.dart';
 import 'package:equatable/equatable.dart';
@@ -44,6 +46,24 @@ class NoteBloc extends Bloc<NoteEvent, NoteState> {
           reOrderNotesUseCase(notes: event.notes);
         } else if (event is RemoveNoteEvent) {
           await removeNoteUseCase(noteIndex: event.noteIndex);
+        } else if (event is SearchNoteEvent) {
+          final notesOrFailure = await fetchNotesUseCase();
+          notesOrFailure.fold(
+            (failure) => null,
+            (notes) {
+              final searchedNotes = notes
+                  .where(
+                    (note) => note.title!
+                        .toLowerCase()
+                        .startsWith(event.searchText.toLowerCase()),
+                  )
+                  .toList();
+              emit(
+                LoadedNoteState(
+                    notes: searchedNotes.isNotEmpty ? searchedNotes : notes),
+              );
+            },
+          );
         }
       },
     );

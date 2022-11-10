@@ -10,9 +10,18 @@ import 'package:note_app/core/utils/widgets_extentions.dart';
 import 'package:note_app/core/widgets/buttons/app_back_button.dart';
 import 'package:note_app/core/widgets/buttons/custom_elevated_button.dart';
 import 'package:note_app/core/widgets/custom_snackbar.dart';
+import 'package:note_app/core/widgets/loading_widget.dart';
 import 'package:note_app/features/backup/domain/entities/backup_data.dart';
 import 'package:note_app/features/backup/presentation/bloc/backup_bloc_bloc.dart';
 import 'package:note_app/features/note/presentation/note/note_bloc.dart';
+import 'package:note_app/features/note/presentation/widgets/app_drawer.dart';
+
+import 'dart:io' show Platform;
+
+import 'package:permission_handler/permission_handler.dart';
+
+import '../../../../core/widgets/app_hamburger_button.dart';
+import '../../../note/presentation/widgets/custom_backup_icon.dart';
 
 class BackupPage extends StatefulWidget {
   static const routeName = '/backupPage';
@@ -28,42 +37,21 @@ class _BackupPageState extends State<BackupPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: kBlackColor,
       appBar: AppBar(
-        leading: const AppBackButton(),
-        backgroundColor: kBlackColor,
         elevation: 0,
       ),
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceAround,
-              children: [
-                CustomElevatedButton(
-                  onPressed: _backupButtonFunc,
-                  child: const Text("Backup"),
-                ),
-                CustomElevatedButton(
-                  onPressed: _pickPathButtonFunc,
-                  child: const Text("Pick path"),
-                ),
-              ],
+            CustomElevatedButton(
+              onPressed: _backupButtonFunc,
+              child: const Text("Backup"),
             ),
             addVerticalSpace(20),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceAround,
-              children: [
-                CustomElevatedButton(
-                  onPressed: _restoreButtonFunc,
-                  child: const Text("Restore"),
-                ),
-                CustomElevatedButton(
-                  onPressed: _pickfileButtonFunc,
-                  child: const Text("pick file"),
-                ),
-              ],
+            CustomElevatedButton(
+              onPressed: _restoreButtonFunc,
+              child: const Text("Restore"),
             ),
             addVerticalSpace(20),
           ],
@@ -73,8 +61,9 @@ class _BackupPageState extends State<BackupPage> {
   }
 
   void _restoreButtonFunc() async {
+    await _pickfileButtonFunc();
     if (file == null) {
-      _showCustomSnackBar("please choose a valid file");
+      return;
     } else {
       BlocProvider.of<BackupBlocBloc>(context).add(
         RestoreEvent(
@@ -87,7 +76,7 @@ class _BackupPageState extends State<BackupPage> {
     }
   }
 
-  void _pickPathButtonFunc() async {
+  Future<void> _pickPathButtonFunc() async {
     selectedDirectory = await FilePicker.platform.getDirectoryPath();
 
     if (selectedDirectory == null) {
@@ -95,9 +84,14 @@ class _BackupPageState extends State<BackupPage> {
     }
   }
 
-  void _backupButtonFunc() {
+  void _backupButtonFunc() async {
+    if (Platform.isAndroid) {
+      final req = await Permission.manageExternalStorage.request();
+    }
+    await _pickPathButtonFunc();
+
     if (selectedDirectory == null || selectedDirectory!.isEmpty) {
-      _showCustomSnackBar("Please choose a valid directory");
+      return;
     } else {
       BlocProvider.of<BackupBlocBloc>(context).add(
         BackupEvent(
@@ -108,9 +102,8 @@ class _BackupPageState extends State<BackupPage> {
     }
   }
 
-  void _pickfileButtonFunc() async {
-    FilePickerResult? result = await FilePicker.platform
-        .pickFiles(allowedExtensions: ["hive"], type: FileType.custom);
+  Future<void> _pickfileButtonFunc() async {
+    FilePickerResult? result = await FilePicker.platform.pickFiles();
 
     if (result != null) {
       file = File(result.files.single.path!);

@@ -4,9 +4,10 @@ import 'package:flutter/src/widgets/framework.dart';
 import 'package:note_app/core/constants/theme_constants.dart';
 
 class CustomTextField extends StatefulWidget {
-  final TextEditingController controller;
+  final TextEditingController? controller;
   final String hintText;
   final int maxLines;
+  final int? maxLength;
   final bool alignLabelWithHint;
   final Function validator;
   const CustomTextField({
@@ -16,6 +17,7 @@ class CustomTextField extends StatefulWidget {
     required this.maxLines,
     required this.alignLabelWithHint,
     required this.validator,
+    required this.maxLength,
   }) : super(key: key);
 
   @override
@@ -35,11 +37,12 @@ class _CustomTextFieldState extends State<CustomTextField> {
             validator: (value) => widget.validator(value),
             controller: widget.controller,
             decoration: InputDecoration(
-              fillColor: Colors.transparent,
-              border: InputBorder.none,
-              labelText: widget.hintText,
-              alignLabelWithHint: widget.alignLabelWithHint,
-            ),
+                fillColor: Colors.transparent,
+                border: InputBorder.none,
+                labelText: widget.hintText,
+                alignLabelWithHint: widget.alignLabelWithHint,
+                counterStyle: TextStyle(color: Colors.white)),
+            maxLength: widget.maxLength,
             maxLines: widget.maxLines,
           ),
         ),

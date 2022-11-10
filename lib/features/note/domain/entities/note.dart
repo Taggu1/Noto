@@ -27,7 +27,7 @@ class Note extends Equatable with HiveObjectMixin {
   final Uint8List? drawing;
 
   @HiveField(6)
-  final Map<HiveOffset, List<HiveOffset>>? points;
+  final Map<HiveOffset, Map<String, dynamic>>? points;
 
   Note(
       {required this.title,

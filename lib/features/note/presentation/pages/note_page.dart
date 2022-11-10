@@ -1,12 +1,14 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_material_color_picker/flutter_material_color_picker.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:note_app/core/constants/theme_constants.dart';
 import 'package:note_app/core/utils/string.dart';
 import 'package:note_app/core/widgets/loading_widget.dart';
 import 'package:note_app/features/note/presentation/pages/edit_add_note_page.dart';
 
+import '../../../../core/utils/rect.dart';
 import '../../../../core/utils/widgets_extentions.dart';
 import '../../../../core/widgets/buttons/app_back_button.dart';
 import '../../../../core/widgets/custom_iconbutton_widget.dart';
@@ -33,7 +35,6 @@ class _NotePageState extends State<NotePage> {
               if (state is LoadedNoteState) {
                 final note = state.notes[widget.index];
                 return Scaffold(
-                  backgroundColor: kBlackColor,
                   appBar: _buildAppBar(context, note, widget.index),
                   body: _buildBody(note),
                 );
@@ -53,8 +54,11 @@ class _NotePageState extends State<NotePage> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            NoteTitleText(
-              title: note.title!,
+            Material(
+              color: Colors.transparent,
+              child: NoteTitleText(
+                title: note.title!,
+              ),
             ),
             addVerticalSpace(20),
             NoteDateText(
@@ -76,7 +80,6 @@ class _NotePageState extends State<NotePage> {
   }
 
   AppBar _buildAppBar(BuildContext context, Note note, int index) => AppBar(
-        backgroundColor: kBlackColor,
         elevation: 0,
         leading: const AppBackButton(),
         actions: [
@@ -136,7 +139,6 @@ class NotePagePhotoWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return SingleChildScrollView(
       child: Container(
-        color: Colors.white,
         child: Image.memory(drawing),
       ),
     );
@@ -167,7 +169,11 @@ class NoteTitleText extends StatelessWidget {
   Widget build(BuildContext context) {
     return Text(
       title,
-      style: titleTextStyle,
+      style: const TextStyle(
+        fontWeight: FontWeight.w700,
+        fontSize: 30,
+        height: 2,
+      ),
     );
   }
 }

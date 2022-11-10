@@ -1,5 +1,6 @@
 import 'dart:ui';
 
+import 'package:colorpicker_flutter/colorpicker_flutter.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
@@ -10,15 +11,22 @@ import 'package:note_app/core/utils/string.dart';
 import 'package:note_app/features/note/data/repositories/note_repository_impl.dart';
 import 'package:note_app/features/note/domain/entities/note.dart';
 import 'package:note_app/features/note/presentation/note/note_bloc.dart';
+import 'package:o_color_picker/o_color_picker.dart';
 
+import '../../../../core/models/hive_offset.dart';
 import '../../../../core/painter/painter.dart';
+import '../../../../core/widgets/buttons/custom_elevated_button.dart';
 import '../../../../core/widgets/custom_iconbutton_widget.dart';
 import '../widgets/drawing_widget.dart';
 import '../widgets/form_widget.dart';
 
 class EditAddNotePage extends StatefulWidget {
   static const routeName = "/edit-add-note-page";
-  const EditAddNotePage({Key? key}) : super(key: key);
+  final int noteIndex;
+  final bool isAdd;
+  const EditAddNotePage(
+      {Key? key, required this.noteIndex, required this.isAdd})
+      : super(key: key);
 
   @override
   State<EditAddNotePage> createState() => _EditAddNotePageState();
@@ -30,16 +38,16 @@ class _EditAddNotePageState extends State<EditAddNotePage> {
   late PainterController _painterController;
   String dt = DateTime.now().toIso8601String();
   String id = DateTime.now().microsecondsSinceEpoch.toString();
-  Color color = getRandomColor();
+  Color noteColor = getRandomColor();
 
   bool withDrawing = false;
   bool _loaded = false;
 
-  bool? isAdd;
   int? noteIndex;
   Uint8List? oldDrawing;
   bool? canScrool;
   Uint8List? drawing;
+  Map<HiveOffset, Map<String, dynamic>>? oldPoints;
 
   @override
   void initState() {
@@ -53,12 +61,8 @@ class _EditAddNotePageState extends State<EditAddNotePage> {
   @override
   void didChangeDependencies() {
     if (_loaded == false) {
-      final args = ModalRoute.of(context)!.settings.arguments as List;
-      isAdd = args.first as bool;
-      if (args.length > 1) {
-        noteIndex = args.last;
-      }
-      if (isAdd == false) {
+      if (!widget.isAdd) {
+        noteIndex = widget.noteIndex;
         final state = BlocProvider.of<NoteBloc>(context).state;
         if (state is LoadedNoteState) {
           final note = state.notes[noteIndex!];
@@ -68,10 +72,11 @@ class _EditAddNotePageState extends State<EditAddNotePage> {
           _titleController.text = note.title!;
           _bodyController.text = note.body!;
 
-          color = note.color!.toMaterialColor();
+          noteColor = note.color!.toMaterialColor();
           id = note.id!;
           dt = note.time!;
           oldDrawing = note.drawing;
+          oldPoints = note.points;
         }
       }
       _loaded = true;
@@ -93,10 +98,11 @@ class _EditAddNotePageState extends State<EditAddNotePage> {
         body: _bodyController.text,
         id: id,
         time: dt,
-        color: color.toString(),
+        color: noteColor.toString(),
         drawing: withDrawing != false ? drawing : oldDrawing,
-        points:
-            withDrawing != false ? _painterController.getMapOfOffsets() : null,
+        points: withDrawing != false
+            ? _painterController.getMapOfOffsets()
+            : oldPoints,
       );
       _sendDataToNoteBloc(newNote);
     }
@@ -107,7 +113,7 @@ class _EditAddNotePageState extends State<EditAddNotePage> {
     return BlocListener<NoteBloc, NoteState>(
       listener: (context, state) {},
       child: Scaffold(
-        backgroundColor: kBlackColor,
+        backgroundColor: Theme.of(context).backgroundColor,
         appBar: _buildAppbar(context),
         body: _buildBody(),
       ),
@@ -116,12 +122,12 @@ class _EditAddNotePageState extends State<EditAddNotePage> {
 
   AppBar _buildAppbar(BuildContext context) {
     return AppBar(
-      backgroundColor: kBlackColor,
+      backgroundColor: Theme.of(context).backgroundColor,
       elevation: 0,
       leading: CustomIconButton(
         icon: Icons.arrow_back,
         onPressed: () {
-          if (isAdd == false) {
+          if (widget.isAdd == false) {
             _add();
           } else {
             Navigator.of(context).pop();
@@ -129,7 +135,20 @@ class _EditAddNotePageState extends State<EditAddNotePage> {
         },
       ),
       actions: [
-        if (isAdd == true)
+        if (!widget.isAdd)
+          CustomIconButton(
+            icon: Icons.delete,
+            buttonColor: Colors.red,
+            onPressed: () {
+              _removeWidget(noteIndex!);
+            },
+          ),
+        CustomIconButton(
+          onPressed: _showColorsDialog,
+          icon: Icons.color_lens,
+          iconColor: noteColor,
+        ),
+        if (widget.isAdd == true)
           CustomIconButton(
             onPressed: () {
               _add();
@@ -185,11 +204,73 @@ class _EditAddNotePageState extends State<EditAddNotePage> {
     BlocProvider.of<NoteBloc>(context).add(
       EditOrAddNoteEvent(
           note: newNote,
-          addOrEdit:
-              isAdd == false ? NoteFunctionType.edit : NoteFunctionType.add,
-          index: isAdd == false ? noteIndex! : null),
+          addOrEdit: widget.isAdd == false
+              ? NoteFunctionType.edit
+              : NoteFunctionType.add,
+          index: widget.isAdd == false ? noteIndex! : null),
     );
     BlocProvider.of<NoteBloc>(context).add(FetchNotesEvent());
     Navigator.of(context).pop();
+  }
+
+  _showColorsDialog() {
+    return showDialog<void>(
+      context: context,
+      builder: (_) => Material(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: <Widget>[
+            OColorPicker(
+              selectedColor: noteColor,
+              colors: primaryColorsPalette,
+              onColorChange: (color) {
+                setState(() {
+                  noteColor = color;
+                });
+                Navigator.of(context).pop();
+              },
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  _removeWidget(int index) {
+    showDialog(
+      context: context,
+      builder: (ctx) => AlertDialog(
+        title: Text(
+          "Do you wanna delete this note",
+          style: Theme.of(context).textTheme.headline4!.copyWith(fontSize: 20),
+        ),
+        actionsAlignment: MainAxisAlignment.spaceBetween,
+        actions: [
+          CustomElevatedButton(
+            onPressed: () {
+              BlocProvider.of<NoteBloc>(context)
+                  .add(RemoveNoteEvent(noteIndex: index));
+              BlocProvider.of<NoteBloc>(context).add(FetchNotesEvent());
+              Navigator.pushReplacementNamed(context, "/");
+            },
+            child: Text("Yes"),
+          ),
+          CustomElevatedButton(
+            onPressed: () {
+              Navigator.pop(context);
+            },
+            child: Text("No"),
+          ),
+        ],
+      ),
+    );
+  }
+
+  @override
+  void dispose() {
+    _titleController.dispose();
+    _bodyController.dispose();
+    _painterController.dispose();
+    super.dispose();
   }
 }

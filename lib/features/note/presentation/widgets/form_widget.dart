@@ -29,6 +29,7 @@ class FormWidget extends StatelessWidget {
               controller: _titleController,
               hintText: 'Title',
               maxLines: 1,
+              maxLength: 40,
               alignLabelWithHint: false,
               validator: (value) {
                 if (value == null || value.isEmpty) {
@@ -41,7 +42,8 @@ class FormWidget extends StatelessWidget {
               CustomTextField(
                 controller: _bodyController!,
                 hintText: 'type something...',
-                maxLines: 8,
+                maxLines: 23,
+                maxLength: null,
                 alignLabelWithHint: true,
                 validator: (value) {
                   if (value == null || value.isEmpty) {

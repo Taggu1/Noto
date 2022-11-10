@@ -1,94 +1,139 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/src/foundation/key.dart';
-import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_expandable_fab/flutter_expandable_fab.dart';
 import 'package:note_app/core/constants/theme_constants.dart';
-import 'package:note_app/core/widgets/custom_iconbutton_widget.dart';
-import 'package:note_app/core/widgets/loading_widget.dart';
-import 'package:note_app/features/backup/presentation/pages/backup_page.dart';
-import 'package:note_app/features/note/data/repositories/note_repository_impl.dart';
-import 'package:note_app/features/note/domain/entities/note.dart';
 import 'package:note_app/features/note/presentation/note/note_bloc.dart';
 import 'package:note_app/features/note/presentation/pages/edit_add_note_page.dart';
-import 'package:xen_popup_card/xen_card.dart';
+import 'package:note_app/features/note/presentation/widgets/app_drawer.dart';
+import 'package:note_app/features/note/presentation/widgets/custom_text_field.dart';
 
+import '../../../../core/widgets/loading_widget.dart';
+import '../widgets/notes_page_appbar.dart';
 import '../widgets/notes_widget.dart';
 
 class NotesPage extends StatelessWidget {
+  static const routeName = "/";
   const NotesPage({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: kBlackColor,
+      drawer: const AppDrawer(),
+      backgroundColor: Theme.of(context).backgroundColor,
       body: _buildBody(context),
-      floatingActionButtonLocation: ExpandableFab.location,
-      floatingActionButton: _buildExpandableFap(context),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () => _addButtonOnPressedFunc(context),
+        child: Icon(Icons.add),
+      ),
+      floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
     );
   }
 
-  SafeArea _buildBody(BuildContext ctx) => SafeArea(
-        child: Column(
-          children: [
-            Expanded(
-              child: BlocBuilder<NoteBloc, NoteState>(
-                builder: (context, state) {
-                  if (state is LoadedNoteState) {
-                    if (state.notes.isEmpty) {
-                      return Center(
-                        child: Text(
-                          "Add some notes",
-                          style: titleTextStyle,
+  Widget _buildBody(BuildContext ctx) => Stack(
+        children: [
+          Padding(
+            padding: const EdgeInsets.only(top: 110),
+            child: Builder(
+              builder: (context) {
+                return Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Column(
+                    children: [
+                      Expanded(
+                        child: BlocBuilder<NoteBloc, NoteState>(
+                          builder: (context, state) {
+                            if (state is LoadedNoteState) {
+                              if (state.notes.isEmpty) {
+                                return const Center(
+                                  child: Text(
+                                    "Add some notes",
+                                    style: titleTextStyle,
+                                  ),
+                                );
+                              }
+                              return NotesWidget(
+                                notes: state.notes,
+                              );
+                            } else if (state is ErrorNotesState) {
+                              return const Center(
+                                child: Text(
+                                  "Something went wrong",
+                                  style: titleTextStyle,
+                                ),
+                              );
+                            } else {
+                              return const LoadingWidget();
+                            }
+                          },
                         ),
-                      );
-                    }
-                    return NotesWidget(
-                      notes: state.notes,
-                    );
-                  } else if (state is ErrorNotesState) {
-                    return Center(
-                      child: Text(
-                        "Something went wrong",
-                        style: titleTextStyle,
                       ),
-                    );
-                  } else {
-                    return const LoadingWidget();
-                  }
-                },
-              ),
+                    ],
+                  ),
+                );
+              },
             ),
-          ],
-        ),
+          ),
+          SearchBar(),
+        ],
       );
 
-  ExpandableFab _buildExpandableFap(BuildContext context) {
-    return ExpandableFab(
-      backgroundColor: kGreyColor,
-      foregroundColor: kWhiteColor,
-      closeButtonStyle: const ExpandableFabCloseButtonStyle(
-        backgroundColor: kGreyColor,
-        foregroundColor: kWhiteColor,
-      ),
-      children: [
-        CustomIconButton(
-            onPressed: () => _backupButtonOnPressedFunc(context),
-            icon: Icons.backup),
-        CustomIconButton(
-          onPressed: () => _addButtonOnPressedFunc(context),
-          icon: Icons.add,
-        ),
-      ],
+  _addButtonOnPressedFunc(BuildContext context) {
+    Navigator.of(context).push(
+      MaterialPageRoute(
+          builder: (context) => const EditAddNotePage(
+                isAdd: true,
+                noteIndex: 0,
+              )),
     );
   }
+}
 
-  _addButtonOnPressedFunc(BuildContext context) {
-    Navigator.of(context)
-        .pushNamed(EditAddNotePage.routeName, arguments: [true]);
-  }
+class SearchBar extends StatelessWidget {
+  const SearchBar({
+    Key? key,
+  }) : super(key: key);
 
-  _backupButtonOnPressedFunc(BuildContext context) {
-    Navigator.of(context).pushNamed(BackupPage.routeName);
+  @override
+  Widget build(BuildContext context) {
+    return Positioned(
+      top: 40,
+      left: 10,
+      right: 10,
+      child: BlocBuilder<NoteBloc, NoteState>(
+        builder: (context, state) {
+          if (state is LoadedNoteState) {
+            return TextField(
+              onChanged: (value) {
+                context.read<NoteBloc>().add(
+                      SearchNoteEvent(
+                        searchText: value,
+                        notes: state.notes,
+                      ),
+                    );
+              },
+              autofocus: false,
+              decoration: InputDecoration(
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(22),
+                  borderSide: const BorderSide(
+                    width: 0,
+                    style: BorderStyle.none,
+                  ),
+                ),
+                contentPadding: EdgeInsets.all(16),
+                prefixIcon: IconButton(
+                  icon: const Icon(
+                    Icons.menu,
+                  ),
+                  onPressed: () {
+                    Scaffold.of(context).openDrawer();
+                  },
+                ),
+              ),
+            );
+          }
+          return Container();
+        },
+      ),
+    );
   }
 }

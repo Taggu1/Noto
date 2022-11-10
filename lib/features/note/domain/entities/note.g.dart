@@ -24,7 +24,7 @@ class NoteAdapter extends TypeAdapter<Note> {
       color: fields[4] as String?,
       drawing: fields[5] as Uint8List?,
       points: (fields[6] as Map?)?.map((dynamic k, dynamic v) =>
-          MapEntry(k as HiveOffset, (v as List).cast<HiveOffset>())),
+          MapEntry(k as HiveOffset, (v as Map).cast<String, dynamic>())),
     );
   }
 

@@ -3,7 +3,7 @@ description: A new Flutter project.
 
 # The following line prevents the package from being accidentally published to
 # pub.dev using `flutter pub publish`. This is preferred for private packages.
-publish_to: 'none' # Remove this line if you wish to publish to pub.dev
+publish_to: "none" # Remove this line if you wish to publish to pub.dev
 
 # The following defines the version and build number for your application.
 # A version number is three numbers separated by dots, like 1.2.43
@@ -29,9 +29,8 @@ environment:
 dependencies:
   auto_size_text: ^3.0.0
   build_runner: ^2.2.0
-  cupertino_icons: ^1.0.2
   dartz: ^0.10.1
-  equatable: ^2.0.3
+  equatable: any
   flutter:
     sdk: flutter
   flutter_bloc: ^8.1.1
@@ -44,16 +43,17 @@ dependencies:
   path_provider: ^2.0.11
   reorderable_grid: ^1.0.4
   shared_preferences: ^2.0.15
-  xen_popup_card: ^0.0.1
   fluttericon: ^2.0.0
   color: ^3.0.0
   easy_color_picker: ^1.0.0
   flutter_native_splash: ^2.2.8
   colorpicker_flutter: ^1.0.3
-  flutter_markdown: ^0.6.10+5
-  desktop_window: ^0.4.0
   file_picker: ^5.0.1
-  flutter_expandable_fab: ^1.5.1
+  permission_handler: ^10.0.0
+  o_color_picker: ^1.0.2
+  rive: ^0.9.1
+  flex_color_scheme: ^6.0.1
+  animations: ^2.0.5
 
 dev_dependencies:
   flutter_lints: ^2.0.0
@@ -69,20 +69,20 @@ flutter_icons:
   windows:
     generate: true
     image_path: "assets/icon/icon.png"
-    icon_size: 48 
+    icon_size: 48
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
 # The following section is specific to Flutter packages.
 flutter:
-
   # The following line ensures that the Material Icons font is
   # included with your application, so that you can use the icons in
   # the material Icons class.
   uses-material-design: true
   # To add assets to your application, add an assets section, like this:
-  # assets:
-  #   - images/a_dot_burr.jpeg
+  assets:
+    - assets/
+    - assets/images/
   #   - images/a_dot_ham.jpeg
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware
@@ -108,8 +108,6 @@ flutter:
   # For details regarding fonts from package dependencies,
   # see https://flutter.dev/custom-fonts/#from-packages
 flutter_native_splash:
-
-
   color: "#f6efed"
 
   image: assets/icon/icon.png

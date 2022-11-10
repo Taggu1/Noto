@@ -42,7 +42,7 @@ class PopUpItem extends StatelessWidget {
   final double elevation;
   final EdgeInsetsGeometry padding;
   final ShapeBorder shape;
-  PopUpItem({
+  const PopUpItem({
     Key? key,
     required this.tag,
     required this.child,

@@ -66,7 +66,7 @@ class NoteRepositoryImpl implements NotesRepository {
   Future<Either<Failure, Unit>> reOrderNotes(
       {required List<Note> notes}) async {
     try {
-      final response = await localDataSource.reOrederNotes(notes: notes);
+      final response = await localDataSource.reOrderNotes(notes: notes);
       return Right(response);
     } on DatabaseException {
       return Left(
