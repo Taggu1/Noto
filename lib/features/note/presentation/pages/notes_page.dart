@@ -28,10 +28,10 @@ class NotesPage extends StatelessWidget {
     );
   }
 
-  Widget _buildBody(BuildContext ctx) => Stack(
+  Widget _buildBody(BuildContext ctx) => Column(
         children: [
-          Padding(
-            padding: const EdgeInsets.only(top: 110),
+          SearchBar(),
+          Expanded(
             child: Builder(
               builder: (context) {
                 return Padding(
@@ -72,7 +72,6 @@ class NotesPage extends StatelessWidget {
               },
             ),
           ),
-          SearchBar(),
         ],
       );
 
@@ -94,10 +93,8 @@ class SearchBar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Positioned(
-      top: 40,
-      left: 10,
-      right: 10,
+    return Padding(
+      padding: const EdgeInsets.only(top: 40, bottom: 10, left: 20, right: 20),
       child: BlocBuilder<NoteBloc, NoteState>(
         builder: (context, state) {
           if (state is LoadedNoteState) {
@@ -106,7 +103,6 @@ class SearchBar extends StatelessWidget {
                 context.read<NoteBloc>().add(
                       SearchNoteEvent(
                         searchText: value,
-                        notes: state.notes,
                       ),
                     );
               },

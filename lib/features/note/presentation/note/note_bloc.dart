@@ -55,7 +55,7 @@ class NoteBloc extends Bloc<NoteEvent, NoteState> {
                   .where(
                     (note) => note.title!
                         .toLowerCase()
-                        .startsWith(event.searchText.toLowerCase()),
+                        .contains(event.searchText.toLowerCase()),
                   )
                   .toList();
               emit(
