@@ -12,9 +12,10 @@ class BackUpRepositoyImpl implements BackupRepository {
   });
 
   @override
-  Either<Failure, Unit> backup({required BackUpData backUpData}) {
+  Future<Either<Failure, Unit>> backup({required BackUpData backUpData}) async {
     try {
-      final response = backupLocalDataSource.backup(backUpData: backUpData);
+      final response =
+          await backupLocalDataSource.backup(backUpData: backUpData);
       return Right(response);
     } catch (e) {
       return Left(DatabaseFailure());

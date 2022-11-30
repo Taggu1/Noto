@@ -9,6 +9,8 @@ import 'package:note_app/features/theme/domain/entities/theme.dart' as et;
 import 'package:note_app/features/theme/presentation/theme/theme_cubit.dart';
 import 'package:note_app/features/theme/presentation/widgets/scheme_photo_widget.dart';
 
+import 'dart:io' show Platform;
+
 class SchemePage extends StatefulWidget {
   static const routeName = "/scheme";
   const SchemePage({super.key});
@@ -19,13 +21,14 @@ class SchemePage extends StatefulWidget {
 
 class _SchemePageState extends State<SchemePage> {
   int currentThemeIndex = 0;
+  bool canScroll = true;
   final _pageController = PageController(initialPage: 0);
   @override
   Widget build(BuildContext context) {
     final Size size = MediaQuery.of(context).size;
     return Scaffold(
       appBar: AppBar(
-        title: const Text("Scheme"),
+        title: const Text("Themes"),
       ),
       body: BlocBuilder<ThemeCubit, ThemeState>(
         builder: (context, state) {
@@ -34,17 +37,21 @@ class _SchemePageState extends State<SchemePage> {
             children: [
               Container(
                 height: size.height * 0.7,
-                child: PageView(
-                  controller: _pageController,
-                  children: [
-                    SchemePhotoWidget(themeNum: 0, isDark: theme.isDarkMode),
-                    SchemePhotoWidget(themeNum: 1, isDark: theme.isDarkMode),
-                    SchemePhotoWidget(themeNum: 2, isDark: theme.isDarkMode),
-                  ],
-                  onPageChanged: (value) {
-                    currentThemeIndex = value;
-                    setState(() {});
-                  },
+                child: GestureDetector(
+                  onPanUpdate: Platform.isWindows ? customDescktopScroll : null,
+                  child: PageView(
+                    scrollDirection: Axis.horizontal,
+                    controller: _pageController,
+                    children: [
+                      SchemePhotoWidget(themeNum: 0, isDark: theme.isDarkMode),
+                      SchemePhotoWidget(themeNum: 1, isDark: theme.isDarkMode),
+                      SchemePhotoWidget(themeNum: 2, isDark: theme.isDarkMode),
+                    ],
+                    onPageChanged: (value) {
+                      currentThemeIndex = value;
+                      setState(() {});
+                    },
+                  ),
                 ),
               ),
               CustomElevatedButton(
@@ -64,6 +71,28 @@ class _SchemePageState extends State<SchemePage> {
         },
       ),
     );
+  }
+
+  void customDescktopScroll(details) {
+    if (details.delta.dx < 0 && canScroll) {
+      canScroll = false;
+      _pageController.animateToPage(
+        currentThemeIndex + 1,
+        duration: const Duration(milliseconds: 400),
+        curve: Curves.easeInOut,
+      );
+      canScroll = true;
+    }
+
+    if (details.delta.dx > 0 && canScroll) {
+      canScroll = false;
+      _pageController.animateToPage(
+        currentThemeIndex - 1,
+        duration: const Duration(milliseconds: 400),
+        curve: Curves.easeInOut,
+      );
+      canScroll = true;
+    }
   }
 
   void _onButtonPressed(

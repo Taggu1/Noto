@@ -29,15 +29,21 @@ class Note extends Equatable with HiveObjectMixin {
   @HiveField(6)
   final Map<HiveOffset, Map<String, dynamic>>? points;
 
-  Note(
-      {required this.title,
-      required this.body,
-      required this.id,
-      required this.time,
-      required this.color,
-      this.drawing,
-      this.points});
+  @HiveField(7)
+  final String? externalImagePath;
+
+  Note({
+    required this.title,
+    required this.body,
+    required this.id,
+    required this.time,
+    required this.color,
+    this.drawing,
+    this.points,
+    this.externalImagePath,
+  });
 
   @override
-  List<Object?> get props => [title, body, id, time, color, drawing, points];
+  List<Object?> get props =>
+      [title, body, id, time, color, drawing, points, externalImagePath];
 }

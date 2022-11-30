@@ -6,14 +6,14 @@ import 'package:flutter/src/widgets/framework.dart';
 class SettingsTile extends StatelessWidget {
   final String titleText;
   final String subTitleText;
-  final Widget trailing;
+  final Widget? trailing;
   final VoidCallback? onbuttonTap;
   const SettingsTile({
     super.key,
     required this.titleText,
     required this.subTitleText,
     this.onbuttonTap,
-    required this.trailing,
+    this.trailing,
   });
 
   @override

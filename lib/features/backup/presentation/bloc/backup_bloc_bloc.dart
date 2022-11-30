@@ -17,11 +17,15 @@ class BackupBlocBloc extends Bloc<BackupBlocEvent, BackupBlocState> {
       : super(BackupBlocInitial()) {
     on<BackupBlocEvent>((event, emit) async {
       if (event is BackupEvent) {
-        emit(LoadingBackuoState());
-        final responseOrFailure = backupUseCase(backUpData: event.backUpData);
+        emit(LoadingBackupState());
+        print("lol");
+        print(state);
+        final responseOrFailure =
+            await backupUseCase(backUpData: event.backUpData);
+
         emit(_mapResponseOrFailureToState(responseOrFailure));
       } else if (event is RestoreEvent) {
-        emit(LoadingBackuoState());
+        emit(LoadingRestoringState());
         final responseOrFailure =
             await restoreUseCase(backUpData: event.backUpData);
         emit(_mapResponseOrFailureToState(responseOrFailure));

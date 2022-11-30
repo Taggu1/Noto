@@ -1,4 +1,5 @@
 import 'dart:ui';
+import 'dart:io';
 
 import 'package:animations/animations.dart';
 import 'package:auto_size_text/auto_size_text.dart';
@@ -45,36 +46,56 @@ class NoteWidget extends StatelessWidget {
     );
   }
 
-  Container _buildwidget(BuildContext context) {
-    return Container(
-      padding: const EdgeInsets.all(30),
-      child: SingleChildScrollView(
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            AutoSizeText(
-              note.title!,
-              style: GoogleFonts.robotoCondensed(
-                fontSize: 20,
-                color: kBlackColor,
-                fontWeight: FontWeight.bold,
+  Widget _buildwidget(BuildContext context) {
+    return SingleChildScrollView(
+      child: Column(
+        children: [
+          if (note.externalImagePath != null)
+            Image.file(
+              File(
+                note.externalImagePath!,
               ),
-              maxLines: 5,
+              fit: BoxFit.fitWidth,
+              errorBuilder: (context, error, stackTrace) => Container(),
             ),
-            const SizedBox(
-              height: 20,
+          if (note.externalImagePath == null && note.drawing != null)
+            Image.memory(
+              note.drawing!,
+              fit: BoxFit.fitWidth,
+              errorBuilder: (context, error, stackTrace) => Container(),
             ),
-            AutoSizeText(
-              note.time!.toFormatedDate(),
-              style: GoogleFonts.robotoCondensed(
-                fontSize: 17,
-                color: kBlackColor.withOpacity(0.5),
-                fontWeight: FontWeight.bold,
+          Container(
+            padding: const EdgeInsets.all(30),
+            child: SingleChildScrollView(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  AutoSizeText(
+                    note.title!,
+                    style: GoogleFonts.robotoCondensed(
+                      fontSize: 20,
+                      color: kBlackColor,
+                      fontWeight: FontWeight.bold,
+                    ),
+                    maxLines: 5,
+                  ),
+                  const SizedBox(
+                    height: 20,
+                  ),
+                  AutoSizeText(
+                    note.time!.toFormatedDate(),
+                    style: GoogleFonts.robotoCondensed(
+                      fontSize: 17,
+                      color: kBlackColor.withOpacity(0.5),
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                ],
               ),
             ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }

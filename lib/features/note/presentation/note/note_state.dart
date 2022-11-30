@@ -28,3 +28,12 @@ class ErrorNotesState extends NoteState {
   @override
   List<Object> get props => [message];
 }
+
+class NoteWasNotFoundState extends NoteState {
+  final String message;
+
+  const NoteWasNotFoundState({required this.message});
+
+  @override
+  List<Object> get props => [message];
+}

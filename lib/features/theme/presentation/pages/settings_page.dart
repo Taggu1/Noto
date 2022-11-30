@@ -13,7 +13,7 @@ class SettingsPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("Settings"),
+        title: const Text("Settings"),
       ),
       body: Column(
         children: [
@@ -23,8 +23,8 @@ class SettingsPage extends StatelessWidget {
             trailing: SwitchThemeButton(),
           ),
           SettingsTile(
-            titleText: "Select scheme",
-            subTitleText: "choose from a variety of beautiful schemes",
+            titleText: "Select theme",
+            subTitleText: "choose from a variety of beautiful themes",
             onbuttonTap: () {
               Navigator.of(context).pushNamed(SchemePage.routeName);
             },

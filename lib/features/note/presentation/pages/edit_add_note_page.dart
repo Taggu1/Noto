@@ -5,6 +5,9 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:fluttericon/entypo_icons.dart';
+import 'package:image_picker/image_picker.dart';
+import 'package:note_app/core/constants/blank_canvas.dart';
 import 'package:note_app/core/constants/theme_constants.dart';
 import 'package:note_app/core/utils/color_utils.dart';
 import 'package:note_app/core/utils/string.dart';
@@ -12,6 +15,7 @@ import 'package:note_app/features/note/data/repositories/note_repository_impl.da
 import 'package:note_app/features/note/domain/entities/note.dart';
 import 'package:note_app/features/note/presentation/note/note_bloc.dart';
 import 'package:o_color_picker/o_color_picker.dart';
+import 'package:path_provider/path_provider.dart';
 
 import '../../../../core/models/hive_offset.dart';
 import '../../../../core/painter/painter.dart';
@@ -19,6 +23,8 @@ import '../../../../core/widgets/buttons/custom_elevated_button.dart';
 import '../../../../core/widgets/custom_iconbutton_widget.dart';
 import '../widgets/drawing_widget.dart';
 import '../widgets/form_widget.dart';
+
+import 'dart:io' show File, Platform;
 
 class EditAddNotePage extends StatefulWidget {
   static const routeName = "/edit-add-note-page";
@@ -36,9 +42,10 @@ class _EditAddNotePageState extends State<EditAddNotePage> {
   final _titleController = TextEditingController();
   final _bodyController = TextEditingController();
   late PainterController _painterController;
-  String dt = DateTime.now().toIso8601String();
-  String id = DateTime.now().microsecondsSinceEpoch.toString();
-  Color noteColor = getRandomColor();
+  String _dt = DateTime.now().toIso8601String();
+  String _id = DateTime.now().microsecondsSinceEpoch.toString();
+  String? _externalImagePath = null;
+  Color _noteColor = getRandomColor();
 
   bool withDrawing = false;
   bool _loaded = false;
@@ -72,9 +79,10 @@ class _EditAddNotePageState extends State<EditAddNotePage> {
           _titleController.text = note.title!;
           _bodyController.text = note.body!;
 
-          noteColor = note.color!.toMaterialColor();
-          id = note.id!;
-          dt = note.time!;
+          _noteColor = note.color!.toMaterialColor();
+          _id = note.id!;
+          _dt = note.time!;
+          _externalImagePath = note.externalImagePath;
           oldDrawing = note.drawing;
           oldPoints = note.points;
         }
@@ -86,23 +94,26 @@ class _EditAddNotePageState extends State<EditAddNotePage> {
 
   final _formKey = GlobalKey<FormState>();
 
-  void _add() async {
+  Future<void> _add() async {
     if (withDrawing) {
       final drawinfDetails = _painterController.finish();
-
-      drawing = await drawinfDetails.toPNG();
+      if (drawinfDetails.picture.approximateBytesUsed > 232) {
+        drawing = await drawinfDetails.toPNG();
+      }
     }
+
     if (_formKey.currentState!.validate()) {
       final Note newNote = Note(
         title: _titleController.text,
         body: _bodyController.text,
-        id: id,
-        time: dt,
-        color: noteColor.toString(),
+        id: _id,
+        time: _dt,
+        color: _noteColor.toString(),
         drawing: withDrawing != false ? drawing : oldDrawing,
         points: withDrawing != false
             ? _painterController.getMapOfOffsets()
             : oldPoints,
+        externalImagePath: _externalImagePath,
       );
       _sendDataToNoteBloc(newNote);
     }
@@ -137,24 +148,32 @@ class _EditAddNotePageState extends State<EditAddNotePage> {
       actions: [
         if (!widget.isAdd)
           CustomIconButton(
-            icon: Icons.delete,
-            buttonColor: Colors.red,
+            icon: Entypo.trash,
             onPressed: () {
               _removeWidget(noteIndex!);
             },
           ),
-        CustomIconButton(
-          onPressed: _showColorsDialog,
-          icon: Icons.color_lens,
-          iconColor: noteColor,
-        ),
         if (widget.isAdd == true)
           CustomIconButton(
             onPressed: () {
               _add();
             },
             icon: Icons.add,
-            buttonColor: Colors.green,
+          ),
+        CustomIconButton(
+          onPressed: _showColorsDialog,
+          icon: Icons.colorize,
+          iconColor: _noteColor,
+        ),
+        if (!Platform.isIOS && !Platform.isWindows)
+          CustomIconButton(
+            onPressed: () async {
+              final ImagePicker _picker = ImagePicker();
+              final XFile? image =
+                  await _picker.pickImage(source: ImageSource.gallery);
+              _externalImagePath = image?.path;
+            },
+            icon: Icons.image,
           ),
         CustomIconButton(
           onPressed: () {
@@ -221,17 +240,46 @@ class _EditAddNotePageState extends State<EditAddNotePage> {
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
             OColorPicker(
-              selectedColor: noteColor,
+              selectedColor: _noteColor,
               colors: primaryColorsPalette,
               onColorChange: (color) {
                 setState(() {
-                  noteColor = color;
+                  _noteColor = color;
                 });
                 Navigator.of(context).pop();
               },
             ),
           ],
         ),
+      ),
+    );
+  }
+
+  _exitPage() {
+    showDialog(
+      context: context,
+      builder: (ctx) => AlertDialog(
+        title: Text(
+          "Do you wanna save this note",
+          style: Theme.of(context).textTheme.headline4!.copyWith(fontSize: 20),
+        ),
+        actionsAlignment: MainAxisAlignment.spaceBetween,
+        actions: [
+          CustomElevatedButton(
+            onPressed: () {
+              Navigator.pop(context);
+              _add();
+            },
+            child: const Text("Yes"),
+          ),
+          CustomElevatedButton(
+            onPressed: () {
+              Navigator.pop(context);
+              Navigator.pop(context);
+            },
+            child: const Text("No"),
+          ),
+        ],
       ),
     );
   }

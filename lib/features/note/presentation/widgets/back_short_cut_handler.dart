@@ -15,7 +15,10 @@ class BackShortcutHandler extends StatelessWidget {
       bindings: {
         const SingleActivator(LogicalKeyboardKey.keyZ, control: true): onInvoke,
       },
-      child: Focus(autofocus: true, child: child),
+      child: Focus(
+        autofocus: true,
+        child: child,
+      ),
     );
   }
 }

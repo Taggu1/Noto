@@ -59,8 +59,9 @@ class NoteBloc extends Bloc<NoteEvent, NoteState> {
                   )
                   .toList();
               emit(
-                LoadedNoteState(
-                    notes: searchedNotes.isNotEmpty ? searchedNotes : notes),
+                searchedNotes.isNotEmpty
+                    ? LoadedNoteState(notes: searchedNotes)
+                    : const NoteWasNotFoundState(message: "Note was not Found"),
               );
             },
           );

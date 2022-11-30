@@ -6,7 +6,7 @@ import 'package:note_app/features/backup/domain/entities/backup_data.dart';
 import '../../../note/domain/entities/note.dart';
 
 abstract class BackupLocalDataSource {
-  Unit backup({required BackUpData backUpData});
+  Future<Unit> backup({required BackUpData backUpData});
   Future<Unit> restore({required BackUpData backUpData});
 }
 
@@ -15,8 +15,13 @@ class BackupLocalDataSourceImpl implements BackupLocalDataSource {
 
   BackupLocalDataSourceImpl({required this.hiveBox});
   @override
-  Unit backup({required BackUpData backUpData}) {
-    File(hiveBox.path!).copy(backUpData.backUpPath);
+  Future<Unit> backup({required BackUpData backUpData}) async {
+    await File(hiveBox.path!).copy(backUpData.backUpPath);
+    // Adding this to show some animations
+    await Future.delayed(
+      const Duration(seconds: 4),
+    );
+
     return unit;
   }
 
@@ -24,7 +29,9 @@ class BackupLocalDataSourceImpl implements BackupLocalDataSource {
   Future<Unit> restore({required BackUpData backUpData}) async {
     final boxPath = hiveBox.path;
     await hiveBox.close();
-    File(backUpData.backUpPath).copy(boxPath!);
+
+    await File(boxPath!).delete();
+    await File(backUpData.backUpPath).copy(boxPath);
     hiveBox = await Hive.openBox("notes");
 
     return Future.value(unit);

@@ -9,7 +9,7 @@ class BackupUseCase {
 
   BackupUseCase({required this.repository});
 
-  Either<Failure, Unit> call({required BackUpData backUpData}) {
-    return repository.backup(backUpData: backUpData);
+  Future<Either<Failure, Unit>> call({required BackUpData backUpData}) async {
+    return await repository.backup(backUpData: backUpData);
   }
 }

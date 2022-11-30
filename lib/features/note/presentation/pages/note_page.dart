@@ -48,6 +48,7 @@ class _NotePageState extends State<NotePage> {
 
   Padding _buildBody(Note note) {
     final bool withDrawing = note.drawing != null ? true : false;
+    final bool withImage = note.externalImagePath != null ? true : false;
     return Padding(
       padding: const EdgeInsets.all(20),
       child: SingleChildScrollView(
@@ -65,10 +66,6 @@ class _NotePageState extends State<NotePage> {
               time: note.time!,
             ),
             addVerticalSpace(20),
-            if (withDrawing)
-              NotePagePhotoWidget(
-                drawing: note.drawing!,
-              ),
             if (!withDrawing)
               NoteBodyText(
                 body: note.body!,

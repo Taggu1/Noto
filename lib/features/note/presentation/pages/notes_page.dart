@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:lottie/lottie.dart';
 import 'package:note_app/core/constants/theme_constants.dart';
 import 'package:note_app/features/note/presentation/note/note_bloc.dart';
 import 'package:note_app/features/note/presentation/pages/edit_add_note_page.dart';
@@ -43,11 +44,19 @@ class NotesPage extends StatelessWidget {
                           builder: (context, state) {
                             if (state is LoadedNoteState) {
                               if (state.notes.isEmpty) {
-                                return const Center(
-                                  child: Text(
-                                    "Add some notes",
-                                    style: titleTextStyle,
-                                  ),
+                                return Column(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    const Text(
+                                      "Add some notes",
+                                      style: titleTextStyle,
+                                    ),
+                                    Lottie.asset(
+                                      "assets/lottie/nothing.json",
+                                      fit: BoxFit.contain,
+                                      height: 330,
+                                    ),
+                                  ],
                                 );
                               }
                               return NotesWidget(
@@ -59,6 +68,22 @@ class NotesPage extends StatelessWidget {
                                   "Something went wrong",
                                   style: titleTextStyle,
                                 ),
+                              );
+                            } else if (state is NoteWasNotFoundState) {
+                              return Column(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Text(
+                                    "Note was not found",
+                                    style:
+                                        titleTextStyle.copyWith(fontSize: 25),
+                                  ),
+                                  Lottie.asset(
+                                    "assets/lottie/space-in-purple.json",
+                                    fit: BoxFit.contain,
+                                    height: 300,
+                                  ),
+                                ],
                               );
                             } else {
                               return const LoadingWidget();
@@ -78,10 +103,11 @@ class NotesPage extends StatelessWidget {
   _addButtonOnPressedFunc(BuildContext context) {
     Navigator.of(context).push(
       MaterialPageRoute(
-          builder: (context) => const EditAddNotePage(
-                isAdd: true,
-                noteIndex: 0,
-              )),
+        builder: (context) => const EditAddNotePage(
+          isAdd: true,
+          noteIndex: 0,
+        ),
+      ),
     );
   }
 }
@@ -97,7 +123,7 @@ class SearchBar extends StatelessWidget {
       padding: const EdgeInsets.only(top: 40, bottom: 10, left: 20, right: 20),
       child: BlocBuilder<NoteBloc, NoteState>(
         builder: (context, state) {
-          if (state is LoadedNoteState) {
+          if (state is LoadedNoteState || state is NoteWasNotFoundState) {
             return TextField(
               onChanged: (value) {
                 context.read<NoteBloc>().add(

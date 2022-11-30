@@ -9,6 +9,8 @@ abstract class BackupBlocState extends Equatable {
 
 class BackupBlocInitial extends BackupBlocState {}
 
-class LoadingBackuoState extends BackupBlocState {}
+class LoadingBackupState extends BackupBlocState {}
 
 class SuccessfulBackupState extends BackupBlocState {}
+
+class LoadingRestoringState extends BackupBlocState {}

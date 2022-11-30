@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/container.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:lottie/lottie.dart';
 import 'package:note_app/core/constants/theme_constants.dart';
 import 'package:note_app/core/utils/widgets_extentions.dart';
 import 'package:note_app/core/widgets/buttons/app_back_button.dart';
@@ -15,6 +16,7 @@ import 'package:note_app/features/backup/domain/entities/backup_data.dart';
 import 'package:note_app/features/backup/presentation/bloc/backup_bloc_bloc.dart';
 import 'package:note_app/features/note/presentation/note/note_bloc.dart';
 import 'package:note_app/features/note/presentation/widgets/app_drawer.dart';
+import 'package:note_app/features/theme/presentation/widgets/settings_tile.dart';
 
 import 'dart:io' show Platform;
 
@@ -40,22 +42,42 @@ class _BackupPageState extends State<BackupPage> {
       appBar: AppBar(
         elevation: 0,
       ),
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            CustomElevatedButton(
-              onPressed: _backupButtonFunc,
-              child: const Text("Backup"),
+      body: Column(
+        children: [
+          SettingsTile(
+            titleText: "Backup",
+            subTitleText: "Click to backup your notes",
+            onbuttonTap: _backupButtonFunc,
+            trailing: BlocBuilder<BackupBlocBloc, BackupBlocState>(
+              builder: (context, state) {
+                if (state is LoadingBackupState) {
+                  return LottieBuilder.network(
+                    "https://assets2.lottiefiles.com/packages/lf20_vu0n2eh3.json",
+                    width: 25,
+                  );
+                }
+                return const Icon(Icons.backup);
+              },
             ),
-            addVerticalSpace(20),
-            CustomElevatedButton(
-              onPressed: _restoreButtonFunc,
-              child: const Text("Restore"),
+          ),
+          addVerticalSpace(20),
+          SettingsTile(
+            titleText: "Restore",
+            subTitleText: "Click to restore your notes",
+            onbuttonTap: _restoreButtonFunc,
+            trailing: BlocBuilder<BackupBlocBloc, BackupBlocState>(
+              builder: (context, state) {
+                if (state is LoadingBackupState) {
+                  return LottieBuilder.network(
+                    "https://assets2.lottiefiles.com/packages/lf20_vu0n2eh3.json",
+                    width: 25,
+                  );
+                }
+                return const Icon(Icons.restore);
+              },
             ),
-            addVerticalSpace(20),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }

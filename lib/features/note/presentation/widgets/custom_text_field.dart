@@ -6,7 +6,7 @@ import 'package:note_app/core/constants/theme_constants.dart';
 class CustomTextField extends StatefulWidget {
   final TextEditingController? controller;
   final String hintText;
-  final int maxLines;
+  final int? maxLines;
   final int? maxLength;
   final bool alignLabelWithHint;
   final Function validator;
@@ -17,7 +17,7 @@ class CustomTextField extends StatefulWidget {
     required this.maxLines,
     required this.alignLabelWithHint,
     required this.validator,
-    required this.maxLength,
+    this.maxLength,
   }) : super(key: key);
 
   @override
