@@ -9,4 +9,4 @@ This is a simple note-taking app where your notes stay safe on ur system away fr
 ![Couldn't load image](assets/icon/icon.png?raw=true "Title")
 
 ## Featuers
-<img src="https://github.com/Taggu1/Noto/blob/main/screenShots/screenshot2.jpg" width="100" height="100">
+<img src="https://github.com/Taggu1/Noto/blob/main/screenShots/screenshot2.jpg" width="100" height="300">
