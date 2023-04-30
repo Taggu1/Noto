@@ -23,7 +23,8 @@
 
 |                                           |                                           |                                           |
 | ----------------------------------------- | ----------------------------------------- | ----------------------------------------- |
-| <img src="screenShots/screenshot2.jpg" width="400"> | <img src="screenShots/screenshot3.jpg" width="400"> | <img src="screenShots/screenshot9.jpg" width="400"> |
+| <img src="screenShots/screenshot2.jpg" width="400"> | <img src="screenShots/screenshot9.jpg" width="400"> | <img src="screenShots/screenshot8.jpg" width="400"> |
+| <img src="screenShots/screenshot7.jpg" width="400"> | <img src="screenShots/screenshot6.jpg" width="400"> | <img src="screenShots/screenshot5.jpg" width="400"> |
 
 ## Contact me 📧
 #### Email : hm834806@gmail.com
