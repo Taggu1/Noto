@@ -1,24 +1,6 @@
-# Noto
-
-This is a simple note-taking app where your notes stay safe on ur system away from the evil internet
-
-
-
-## Icon
-
-![Couldn't load image](assets/icon/icon.png?raw=true "Title")
-
-## Featuers
-<img src="https://github.com/Taggu1/Noto/blob/main/screenShots/screenshot4.jpg" width="300" height="500">
-<img src="https://github.com/Taggu1/Noto/blob/main/screenShots/screenshot5.jpg" width="300" height="500">
-<img src="https://github.com/Taggu1/Noto/blob/main/screenShots/screenshot6.jpg" width="300" height="500">
-<img src="https://github.com/Taggu1/Noto/blob/main/screenShots/screenshot7.jpg" width="300" height="500">
-<img src="https://github.com/Taggu1/Noto/blob/main/screenShots/screenshot2.jpg" width="300" height="500">
-<img src="https://github.com/Taggu1/Noto/blob/main/screenShots/screenshot3.jpg" width="300" height="500">
-
-
-
 # Flutter Note-Taking app [![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg?style=flat-square)](http://makeapullrequest.com)
+
+ <img src="assets/icon/icon.png" width="100">
 
 ⭐️ the repo if you love it.
 
