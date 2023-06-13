@@ -45,7 +45,6 @@ class FolderWidget extends StatelessWidget {
   }
 
   void _onAccept(Note details, BuildContext context) {
-    print(folder.folderName);
     BlocProvider.of<NoteBloc>(context).add(
       EditOrAddNoteEvent(
         note: details.copyWith(

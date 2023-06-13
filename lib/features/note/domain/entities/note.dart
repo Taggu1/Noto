@@ -72,10 +72,34 @@ class Note extends Equatable with HiveObjectMixin {
       id: id,
       time: time,
       color: color,
-      drawing: drawing,
-      points: points,
       externalImagePath: externalImagePath,
       folderName: folderName ?? this.folderName,
+    );
+  }
+
+  Map<String, dynamic> toFirebase({required String userId}) {
+    return {
+      "userId": userId,
+      "color": color,
+      "index": index,
+      if (folderName != null) "folderName": folderName,
+      if (time != null) "time": time,
+      if (title != null) "title": title,
+      if (body != null) "body": body,
+    };
+  }
+
+  factory Note.fromFirebase(Map<String, dynamic> json, final String id) {
+    return Note(
+      index: json["index"],
+      title: json["title"],
+      body: json["body"],
+      id: id,
+      time: json["time"],
+      color: json["color"],
+      drawing: json["drawing"],
+      folderName: json["folderName"],
+      points: json["points"],
     );
   }
 }

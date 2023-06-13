@@ -1,11 +1,12 @@
-import 'package:firedart/auth/firebase_auth.dart';
-import 'package:firedart/firedart.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:get_it/get_it.dart';
 import 'package:hive/hive.dart';
 
 import 'package:note_app/core/constants/strings.dart';
 import 'package:note_app/core/data_sources/local_data_source.dart';
-import 'package:note_app/core/models/hive_store.dart';
+
 import 'package:note_app/features/backup/data/data_sources/backup_local_data_source.dart';
 import 'package:note_app/features/backup/data/repository/backup_repository_impl.dart';
 import 'package:note_app/features/backup/domain/repository/backup_repository.dart';
@@ -17,6 +18,7 @@ import 'package:note_app/features/habits/domain/models/habit.dart';
 import 'package:note_app/features/habits/domain/repository/habit_repository.dart';
 import 'package:note_app/features/habits/presentation/habit_bloc/habit_bloc.dart';
 import 'package:note_app/features/note/data/data_sources/note_local_data_source.dart';
+import 'package:note_app/features/note/data/data_sources/note_remote_data_source.dart';
 import 'package:note_app/features/note/data/repositories/note_repository_impl.dart';
 import 'package:note_app/features/note/domain/entities/folder.dart';
 import 'package:note_app/features/note/domain/entities/note.dart';
@@ -46,9 +48,7 @@ import 'features/auth/data/repositories/auth_repository_impl.dart';
 import 'features/auth/domain/repositories/auth_repository.dart';
 import 'features/auth/presentation/auth/auth_bloc.dart';
 import 'features/theme/presentation/theme/theme_cubit.dart';
-
-const apiKey = 'AIzaSyBUscwqaHgo0NQpk6doYMlFVxtVFUNR95w';
-const projectId = 'noto-86e99';
+import 'firebase_options.dart';
 
 final sl = GetIt.instance;
 
@@ -165,6 +165,7 @@ Future<void> init() async {
   sl.registerLazySingleton<AuthRepository>(
     () => AuthRepositoryImpl(
       authRemoteDataSource: sl(),
+      notesRepository: sl(),
     ),
   );
 
@@ -190,6 +191,7 @@ Future<void> init() async {
     () => NoteRepositoryImpl(
       noteLocalDataSource: sl(),
       localDataSourceImpl: sl(),
+      noteRemoteDataSource: sl(),
     ),
   );
 
@@ -244,10 +246,21 @@ Future<void> init() async {
     ),
   );
 
+  sl.registerLazySingleton<NoteRemoteDataSource>(
+    () => NoteRemoteDataSourceImpl(
+      db: sl(),
+      auth: sl(),
+    ),
+  );
+
   // External
   final dir = await getApplicationDocumentsDirectory();
 
   Hive.init("${dir.path}/Notes/s/");
+
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
 
   Hive.registerAdapter(HiveOffsetAdapter());
   Hive.registerAdapter(NoteAdapter());
@@ -255,13 +268,11 @@ Future<void> init() async {
   Hive.registerAdapter(AppTaskAdapter());
   Hive.registerAdapter(HabitAdapter());
   Hive.registerAdapter(FolderAdapter());
-  Hive.registerAdapter(TokenAdapter());
   final notesBox = await Hive.openBox<Note>(kNotesBoxName);
   final themeBox = await Hive.openBox<Theme>(kThemeBoxName);
   final tasksBox = await Hive.openBox<AppTask>(kTasksBoxName);
   final habitsBox = await Hive.openBox<Habit>(kHabitBoxName);
   final foldersBox = await Hive.openBox<Folder>(kFolderBoxName);
-  habitsBox.clear();
   sl.registerLazySingleton(() => notesBox);
 
   sl.registerLazySingleton(() => themeBox);
@@ -272,17 +283,8 @@ Future<void> init() async {
 
   sl.registerLazySingleton(() => foldersBox);
 
-  FirebaseAuth.initialize(
-    apiKey,
-    await HiveStore.create(),
-  );
-
-  Firestore.initialize(
-    projectId,
-  );
-
   sl.registerLazySingleton(
-    () => Firestore.instance,
+    () => FirebaseFirestore.instance,
   );
 
   sl.registerLazySingleton(

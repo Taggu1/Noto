@@ -15,8 +15,12 @@ class FetchNotesEvent extends NoteEvent {
 
 class EditOrAddNoteEvent extends NoteEvent {
   final Note note;
+  final bool onlineAdd;
 
-  const EditOrAddNoteEvent({required this.note});
+  const EditOrAddNoteEvent({
+    required this.note,
+    this.onlineAdd = true,
+  });
 
   @override
   List<Object> get props => [note];

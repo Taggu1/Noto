@@ -21,6 +21,7 @@ class _SelectColorWidgetState extends State<SelectColorWidget> {
     selectedColor = widget.selectedColor;
   }
 
+  @override
   Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 15, horizontal: 15),
@@ -32,7 +33,7 @@ class _SelectColorWidgetState extends State<SelectColorWidget> {
               "Color",
               style: TextStyle(fontSize: 18),
             ),
-            SizedBox(
+            const SizedBox(
               height: 15,
             ),
             SingleChildScrollView(
@@ -51,7 +52,7 @@ class _SelectColorWidgetState extends State<SelectColorWidget> {
                             widget.onColorTapped(color);
                           },
                           child: AnimatedContainer(
-                            duration: Duration(milliseconds: 200),
+                            duration: const Duration(milliseconds: 200),
                             width: 50,
                             height: 50,
                             decoration: BoxDecoration(

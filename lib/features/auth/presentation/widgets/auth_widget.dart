@@ -1,19 +1,10 @@
-import 'dart:ui';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:note_app/core/constants/strings.dart';
-import 'package:note_app/core/constants/theme_constants.dart';
-import 'package:note_app/core/utils/auth_utils.dart';
-import 'package:note_app/core/utils/widgets_extentions.dart';
-import 'package:note_app/core/widgets/buttons/custom_elevated_button.dart';
+
 import 'package:note_app/core/widgets/custom_snackbar.dart';
 import 'package:note_app/features/auth/presentation/auth/auth_bloc.dart';
-import 'package:note_app/features/auth/presentation/widgets/auth_form_title.dart';
 import 'package:note_app/features/auth/presentation/widgets/authed_widget.dart';
 import 'package:note_app/features/auth/presentation/widgets/sign_up_or_login_form.dart';
-import 'package:note_app/features/todo/presentation/widgets/sheet_title_text.dart';
-import 'package:note_app/features/todo/presentation/widgets/sheet_text_field.dart';
 
 class AuthWidget extends StatelessWidget {
   const AuthWidget({super.key});

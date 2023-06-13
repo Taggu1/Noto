@@ -21,7 +21,6 @@ import 'package:note_app/features/todo/presentation/tasks/tasks_bloc.dart';
 import 'package:note_app/features/todo/presentation/widgets/date_chip.dart';
 import 'package:note_app/features/todo/presentation/widgets/select_days_widget.dart';
 import 'package:note_app/features/todo/presentation/widgets/sheet_title_row.dart';
-import 'package:note_app/features/todo/presentation/widgets/sheet_title_text.dart';
 import 'package:note_app/features/todo/presentation/widgets/sheet_text_field.dart';
 import 'package:uuid/uuid.dart';
 import 'package:collection/collection.dart';
@@ -247,7 +246,6 @@ class _AddItemSheetState extends State<AddItemSheet> {
             reminder: _reminderDate?.toDateString(),
             color: _selectedColor?.toString() ?? getRandomColor().toString(),
             id: _id ?? const Uuid().v4(),
-            done: false,
             createdAt: oldTask?.createdAt ??
                 _reminderDate?.toDateString() ??
                 _date.toDateString(),

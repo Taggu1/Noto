@@ -16,12 +16,12 @@ class NotesPageAppbar extends StatelessWidget {
           Radius.circular(12),
         ),
       ),
-      leading: AppHambergerButton(),
-      title: Text(
+      leading: const AppHambergerButton(),
+      title: const Text(
         "Your notes",
       ),
       centerTitle: true,
-      actions: [],
+      actions: const [],
     );
   }
 }

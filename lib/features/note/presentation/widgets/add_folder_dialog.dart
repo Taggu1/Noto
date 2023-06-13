@@ -107,7 +107,7 @@ class _AddFolderDialogState extends State<AddFolderDialog> {
             ),
           );
           BlocProvider.of<NoteBloc>(context).add(
-            FetchNotesEvent(
+            const FetchNotesEvent(
               folderName: "All",
             ),
           );

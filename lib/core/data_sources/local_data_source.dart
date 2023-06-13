@@ -46,7 +46,9 @@ class LocalDataSourceImpl<T> implements LocalDataSource<T> {
   @override
   Future<Unit> removeItem({required String itemId}) {
     try {
+      print(itemId);
       hiveBox.delete(itemId);
+      print("done");
       return Future.value(unit);
     } catch (e) {
       throw DatabaseException();

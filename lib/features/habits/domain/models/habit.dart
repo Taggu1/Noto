@@ -1,6 +1,5 @@
 import 'package:equatable/equatable.dart';
 import 'package:hive/hive.dart';
-import 'package:uuid/uuid.dart';
 
 part 'habit.g.dart';
 
@@ -27,7 +26,7 @@ class Habit extends Equatable {
   @HiveField(6)
   final List<int> habitDays;
 
-  Habit({
+  const Habit({
     required this.time,
     required this.createdAt,
     required this.doneDates,

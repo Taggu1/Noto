@@ -100,7 +100,7 @@ class _NotePageState extends State<NotePage> {
       deleted = true;
     });
     BlocProvider.of<NoteBloc>(context).add(RemoveNoteEvent(noteId: id));
-    BlocProvider.of<NoteBloc>(context).add(FetchNotesEvent());
+    BlocProvider.of<NoteBloc>(context).add(const FetchNotesEvent());
     Navigator.of(context).pop();
   }
 }
@@ -131,9 +131,7 @@ class NotePagePhotoWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SingleChildScrollView(
-      child: Container(
-        child: Image.memory(drawing),
-      ),
+      child: Image.memory(drawing),
     );
   }
 }

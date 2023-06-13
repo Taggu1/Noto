@@ -1,5 +1,6 @@
 import 'package:dartz/dartz.dart';
 import 'package:note_app/core/utils/auth_utils.dart';
+import 'package:note_app/features/note/domain/repositories/note_repository.dart';
 
 import '../../../../core/errors/failures.dart';
 import '../../domain/models/app_user.dart';
@@ -8,9 +9,11 @@ import '../data_sources/auth_remote_data_source.dart';
 
 class AuthRepositoryImpl implements AuthRepository {
   final AuthRemoteDataSource authRemoteDataSource;
+  final NotesRepository notesRepository;
 
   AuthRepositoryImpl({
     required this.authRemoteDataSource,
+    required this.notesRepository,
   });
 
   @override
@@ -22,11 +25,10 @@ class AuthRepositoryImpl implements AuthRepository {
         password: password,
       );
 
-      print(user);
+      await _sync();
 
       return Right(user);
     } catch (e) {
-      print(e);
       return Left(
         AuthFailure(message: mapErrorCodeToMessage(e.toString())),
       );
@@ -57,11 +59,12 @@ class AuthRepositoryImpl implements AuthRepository {
         password: password,
       );
 
+      await _sync();
+
       return Right(
         databaseUser,
       );
     } catch (e) {
-      print(e);
       return Left(
         AuthFailure(message: mapErrorCodeToMessage(e.toString())),
       );
@@ -72,15 +75,17 @@ class AuthRepositoryImpl implements AuthRepository {
   Future<Either<Failure, AppUser?>> fetchUser() async {
     try {
       final user = await authRemoteDataSource.fetchUser();
-      print(user);
       return Right(
         user,
       );
     } catch (e) {
-      print(e);
       return Left(
         AuthFailure(message: mapErrorCodeToMessage(e.toString())),
       );
     }
+  }
+
+  Future<void> _sync() async {
+    await notesRepository.syncNotes();
   }
 }

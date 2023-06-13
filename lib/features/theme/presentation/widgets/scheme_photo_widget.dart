@@ -23,7 +23,7 @@ class SchemePhotoWidget extends StatelessWidget {
             ),
             Image.asset(
               width: constraints.maxWidth * 0.48,
-              "assets/images/sd${themeNum}${prefix}.jpg",
+              "assets/images/sd$themeNum$prefix.jpg",
             ),
           ],
         );

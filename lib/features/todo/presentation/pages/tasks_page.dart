@@ -25,7 +25,7 @@ class TasksPage extends StatefulWidget {
 class _TasksPageState extends State<TasksPage> {
   bool _toggleMode = false;
 
-  Map<String, int?> _toggleIndexesMap = {};
+  final Map<String, int?> _toggleIndexesMap = {};
   DateTime _date = DateTime.now();
 
   @override

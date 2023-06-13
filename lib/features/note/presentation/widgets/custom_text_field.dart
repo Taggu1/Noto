@@ -38,7 +38,7 @@ class _CustomTextFieldState extends State<CustomTextField> {
                 border: InputBorder.none,
                 labelText: widget.hintText,
                 alignLabelWithHint: widget.alignLabelWithHint,
-                counterStyle: TextStyle(color: Colors.white)),
+                counterStyle: const TextStyle(color: Colors.white)),
             maxLength: widget.maxLength,
             maxLines: widget.maxLines,
           ),

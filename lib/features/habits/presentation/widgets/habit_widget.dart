@@ -6,7 +6,6 @@ import 'package:note_app/core/utils/string.dart';
 import 'package:note_app/features/habits/presentation/habit_bloc/habit_bloc.dart';
 import 'package:note_app/features/habits/presentation/widgets/day_cell_widget.dart';
 
-import '../../../todo/domain/entities/task.dart';
 import '../../../todo/presentation/widgets/add_item_sheet.dart';
 import '../../domain/models/habit.dart';
 

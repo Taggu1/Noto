@@ -1,5 +1,3 @@
-import 'dart:ui';
-
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
@@ -42,7 +40,7 @@ class _EditAddNotePageState extends State<EditAddNotePage> {
   late PainterController _painterController;
   String _dt = DateTime.now().toIso8601String();
   String _id = const Uuid().v4();
-  String? _externalImagePath = null;
+  String? _externalImagePath;
   Color _noteColor = getRandomColor();
 
   bool withDrawing = false;
@@ -68,8 +66,8 @@ class _EditAddNotePageState extends State<EditAddNotePage> {
   void didChangeDependencies() {
     if (_loaded == false) {
       final notesState = BlocProvider.of<NoteBloc>(context).state;
-      if (notesState is LoadedNoteState) {
-        noteIndex = notesState.notes.length;
+      if (notesState is LoadedNoteState && notesState.notes.isNotEmpty) {
+        noteIndex = notesState.notes.last.index + 1;
       }
       if (!widget.isAdd) {
         noteIndex = widget.noteIndex;
@@ -138,7 +136,7 @@ class _EditAddNotePageState extends State<EditAddNotePage> {
     return BlocListener<NoteBloc, NoteState>(
       listener: (context, state) {},
       child: Scaffold(
-        backgroundColor: Theme.of(context).backgroundColor,
+        backgroundColor: Theme.of(context).colorScheme.background,
         appBar: _buildAppbar(context),
         body: _buildBody(),
       ),
@@ -170,7 +168,6 @@ class _EditAddNotePageState extends State<EditAddNotePage> {
         if (widget.isAdd == true)
           CustomIconButton(
             onPressed: () {
-              print("FolderName");
               _add();
             },
             icon: Icons.add,
@@ -183,9 +180,9 @@ class _EditAddNotePageState extends State<EditAddNotePage> {
         if (!Platform.isIOS && !Platform.isWindows)
           CustomIconButton(
             onPressed: () async {
-              final ImagePicker _picker = ImagePicker();
+              final ImagePicker picker = ImagePicker();
               final XFile? image =
-                  await _picker.pickImage(source: ImageSource.gallery);
+                  await picker.pickImage(source: ImageSource.gallery);
               _externalImagePath = image?.path;
             },
             icon: Icons.image,
@@ -264,35 +261,6 @@ class _EditAddNotePageState extends State<EditAddNotePage> {
             selectedColor: _noteColor,
           );
         });
-  }
-
-  _exitPage() {
-    showDialog(
-      context: context,
-      builder: (ctx) => AlertDialog(
-        title: Text(
-          "Do you wanna save this note",
-          style: Theme.of(context).textTheme.headline4!.copyWith(fontSize: 20),
-        ),
-        actionsAlignment: MainAxisAlignment.spaceBetween,
-        actions: [
-          CustomElevatedButton(
-            onPressed: () {
-              Navigator.pop(context);
-              _add();
-            },
-            child: const Text("Yes"),
-          ),
-          CustomElevatedButton(
-            onPressed: () {
-              Navigator.pop(context);
-              Navigator.pop(context);
-            },
-            child: const Text("No"),
-          ),
-        ],
-      ),
-    );
   }
 
   _removeNote(String id) {

@@ -18,8 +18,7 @@ class BackupBlocBloc extends Bloc<BackupBlocEvent, BackupBlocState> {
     on<BackupBlocEvent>((event, emit) async {
       if (event is BackupEvent) {
         emit(LoadingBackupState());
-        print("lol");
-        print(state);
+
         final responseOrFailure =
             await backupUseCase(backUpData: event.backUpData);
 

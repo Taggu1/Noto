@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:note_app/core/constants/theme_constants.dart';
+import 'package:note_app/features/note/presentation/folder/folder_cubit.dart';
 import 'package:note_app/features/note/presentation/note/note_bloc.dart';
 import 'package:note_app/features/note/presentation/pages/edit_add_note_page.dart';
 
@@ -38,7 +39,13 @@ class NoteWidget extends StatelessWidget {
           ),
         );
         Future.delayed(const Duration(milliseconds: 200), () {
-          BlocProvider.of<NoteBloc>(context).add(FetchNotesEvent());
+          final foderName =
+              BlocProvider.of<FolderCubit>(context).state.currentName;
+          BlocProvider.of<NoteBloc>(context).add(
+            FetchNotesEvent(
+              folderName: foderName,
+            ),
+          );
         });
       },
       builder: (BuildContext context, List<Note?> candidateData,
@@ -96,7 +103,7 @@ class NoteWidget extends StatelessWidget {
               color: Colors.grey.withOpacity(0.5),
               spreadRadius: 5,
               blurRadius: 7,
-              offset: Offset(0, 3), // changes position of shadow
+              offset: const Offset(0, 3), // changes position of shadow
             ),
           ],
           color: note.color!.toMaterialColor(),
@@ -161,9 +168,5 @@ class NoteWidget extends StatelessWidget {
         ],
       ),
     );
-  }
-
-  _ontap(BuildContext context) {
-    ;
   }
 }

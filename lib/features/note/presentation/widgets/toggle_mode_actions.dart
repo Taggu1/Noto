@@ -83,13 +83,13 @@ class CustomAlertDialog extends StatelessWidget {
       actions: [
         CustomElevatedButton(
           onPressed: onDelete,
-          child: Text("Yes"),
+          child: const Text("Yes"),
         ),
         CustomElevatedButton(
           onPressed: () {
             Navigator.pop(context);
           },
-          child: Text("No"),
+          child: const Text("No"),
         ),
       ],
     );

@@ -57,16 +57,17 @@ class NoteBloc extends Bloc<NoteEvent, NoteState> {
 
           emit(
             LoadedNoteState(
-              notes: currentState.notes
-                ..removeWhere(
-                  (note) => note.id == event.noteId,
-                ),
+              notes: currentState.notes,
             ),
           );
         } else if (event is RemoveNotesEvent) {
-          for (final id in event.idsList) {
-            await removeNoteUseCase(noteId: id);
-          }
+          // ignore: avoid_function_literals_in_foreach_calls
+          emit(LoadingNotesState());
+          event.idsList.forEach((id) async {
+            await removeNoteUseCase(
+              noteId: id,
+            );
+          });
         } else if (event is SearchNoteEvent) {
           final notesOrFailure = await fetchNotesUseCase(
             folderName: event.currentFolderName,
@@ -104,14 +105,10 @@ class NoteBloc extends Bloc<NoteEvent, NoteState> {
             (note) => note.folderName == event.oldFolderName,
           );
 
-          print(folderNotes);
-
           for (final note in folderNotes) {
             if (event.isRemove) {
               await removeNoteUseCase(noteId: note.id);
             } else {
-              print(event.oldFolderName);
-              print(note);
               await addOrEditNoteUseCase(
                 note: note.copyWith(
                   folderName: event.newFolderName,
@@ -147,10 +144,7 @@ class NoteBloc extends Bloc<NoteEvent, NoteState> {
       (faliure) => const ErrorNotesState(
           message: "Something worng happend while loading the notes"),
       (unit) {
-        if (stateNotes.contains(note)) {
-          stateNotes.removeWhere((thisNote) => thisNote.id == note.id);
-        }
-        return LoadedNoteState(notes: stateNotes..add(note));
+        return state;
       },
     );
   }

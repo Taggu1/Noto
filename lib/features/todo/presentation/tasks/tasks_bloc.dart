@@ -1,7 +1,6 @@
 import 'package:bloc/bloc.dart';
 import 'package:dartz/dartz.dart';
 import 'package:equatable/equatable.dart';
-import 'package:note_app/core/utils/date_utils.dart';
 import 'package:note_app/features/todo/domain/repository/tasks_repo.dart';
 
 import '../../../../core/errors/failures.dart';

@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:note_app/core/constants/theme_constants.dart';
-import 'package:note_app/features/habits/presentation/habit_bloc/habit_bloc.dart';
 
 class DayCellWidget extends StatelessWidget {
   final DateTime date;

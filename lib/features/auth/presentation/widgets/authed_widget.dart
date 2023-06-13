@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:note_app/core/utils/widgets_extentions.dart';
 import 'package:note_app/core/widgets/buttons/custom_elevated_button.dart';
-import 'package:note_app/core/widgets/custom_text_button.dart';
 import 'package:note_app/features/auth/domain/models/app_user.dart';
 import 'package:note_app/features/auth/presentation/auth/auth_bloc.dart';
 
@@ -16,8 +15,9 @@ class AuthedWidget extends StatelessWidget {
       padding: const EdgeInsets.all(15),
       child: SingleChildScrollView(
         child: SizedBox(
-          height: 100,
+          height: 150,
           child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Text(
                 "You are signed in as ${user.email!}  🎉",
@@ -28,7 +28,7 @@ class AuthedWidget extends StatelessWidget {
               addVerticalSpace(30),
               CustomElevatedButton(
                 onPressed: () => signout(context),
-                child: Text(
+                child: const Text(
                   "SignOut",
                 ),
               )

@@ -36,7 +36,6 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
           _mapUserOrFailureToAuthState(userOrFailure),
         );
       } else if (event is FetchUserAuthEvent) {
-        print("ASDAD");
         emit(LoadingAuthState());
 
         final userOrFailure = await repository.fetchUser();
@@ -63,7 +62,6 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
         message: failure.message,
       ),
       (user) {
-        print(user);
         return user == null
             ? NotAuthenticatedAuthState()
             : AuthenticatedAuthState(
@@ -77,7 +75,6 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
       {AppUser? eventUser, AppUser? oldUser}) {
     return userOrFailure.fold(
       (failure) {
-        print(oldUser);
         return oldUser == null
             ? state
             : AuthedErrorAuthState(message: failure.message, user: oldUser);

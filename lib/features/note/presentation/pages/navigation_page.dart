@@ -22,9 +22,9 @@ class _NavigationPageState extends State<NavigationPage> {
   int _selectedPageIndex = 0;
 
   List<Widget> pages = [
-    NotesPage(),
-    TasksPage(),
-    HabitPage(),
+    const NotesPage(),
+    const TasksPage(),
+    const HabitPage(),
   ];
 
   @override

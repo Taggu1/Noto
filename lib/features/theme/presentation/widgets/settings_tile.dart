@@ -16,7 +16,7 @@ class SettingsTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      decoration: BoxDecoration(),
+      decoration: const BoxDecoration(),
       child: ListTile(
         title: Text(titleText),
         subtitle: Text(subTitleText),

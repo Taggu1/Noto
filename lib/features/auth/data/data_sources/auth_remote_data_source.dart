@@ -1,5 +1,6 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dartz/dartz.dart';
-import 'package:firedart/firedart.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 import '../../domain/models/app_user.dart';
 
@@ -12,7 +13,7 @@ abstract class AuthRemoteDataSource {
 
 class AuthRemoteDataSourceImpl extends AuthRemoteDataSource {
   final FirebaseAuth auth;
-  final Firestore database;
+  final FirebaseFirestore database;
 
   AuthRemoteDataSourceImpl({
     required this.auth,
@@ -22,13 +23,15 @@ class AuthRemoteDataSourceImpl extends AuthRemoteDataSource {
   @override
   Future<AppUser> logIn(
       {required String password, required String email}) async {
-    // TODO: implement logIn
-    final user = await auth.signIn(
-      email,
-      password,
+    final user = await auth.signInWithEmailAndPassword(
+      email: email,
+      password: password,
     );
 
-    return AppUser(email: user.email, id: user.id);
+    return AppUser(
+      email: email,
+      id: user.user!.uid,
+    );
   }
 
   @override
@@ -40,29 +43,26 @@ class AuthRemoteDataSourceImpl extends AuthRemoteDataSource {
   @override
   Future<AppUser> signUp(
       {required String password, required String email}) async {
-    final user = await auth.signUp(
-      email,
-      password,
+    final user = await auth.createUserWithEmailAndPassword(
+      email: email,
+      password: password,
     );
 
     return AppUser(
-      email: user.email,
-      id: user.id,
+      email: email,
+      id: user.user!.uid,
     );
   }
 
   @override
   Future<AppUser?> fetchUser() async {
-    if (!auth.isSignedIn) {
-      print("nice");
-
+    if (auth.currentUser == null) {
       return null;
     }
-    final user = await auth.getUser();
-    print(user);
+    final user = auth.currentUser;
     return AppUser(
-      email: user.email,
-      id: user.id,
+      email: user!.email,
+      id: user.uid,
     );
   }
 }

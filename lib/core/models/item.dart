@@ -7,6 +7,5 @@ class Item extends Equatable {
   Item() : id = const Uuid().v4();
 
   @override
-  // TODO: implement props
   List<Object?> get props => [id];
 }

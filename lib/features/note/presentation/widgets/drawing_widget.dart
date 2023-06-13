@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 import 'package:fluttericon/typicons_icons.dart';
 import 'package:note_app/core/utils/my_color_picker.dart';
@@ -59,7 +58,7 @@ class _DrawingWidgetState extends State<DrawingWidget> {
               padding: const EdgeInsets.only(top: 18),
               child: Column(
                 children: [
-                  Container(
+                  SizedBox(
                     width: size.width,
                     height: drawingPlattehight,
                     child: Painter(widget.painterController, !canScroll),
@@ -134,7 +133,7 @@ class _DrawingActionsRawState extends State<DrawingActionsRaw> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      color: Theme.of(context).backgroundColor,
+      color: Theme.of(context).colorScheme.background,
       child: SingleChildScrollView(
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,

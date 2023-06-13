@@ -9,15 +9,9 @@ class CustomBackupButtonIcon extends StatefulWidget {
 }
 
 class _CustomBackupButtonIconState extends State<CustomBackupButtonIcon> {
-  late RiveAnimationController _controller;
-
-  void _togglePlay() =>
-      setState(() => _controller.isActive = !_controller.isActive);
-
   @override
   void initState() {
     super.initState();
-    _controller = SimpleAnimation('idle');
   }
 
   void _onRiveInit(Artboard artboard) {

@@ -81,7 +81,9 @@ class _BackupPageState extends State<BackupPage> {
         ),
       );
       Future.delayed(const Duration(milliseconds: 300)).then(
-        (value) => BlocProvider.of<NoteBloc>(context).add(FetchNotesEvent()),
+        (value) => BlocProvider.of<NoteBloc>(context).add(
+          const FetchNotesEvent(),
+        ),
       );
     }
   }
@@ -96,7 +98,7 @@ class _BackupPageState extends State<BackupPage> {
 
   void _backupButtonFunc() async {
     if (Platform.isAndroid) {
-      final req = await Permission.manageExternalStorage.request();
+      await Permission.manageExternalStorage.request();
     }
     await _pickPathButtonFunc();
 
@@ -117,7 +119,6 @@ class _BackupPageState extends State<BackupPage> {
 
     if (result != null) {
       file = File(result.files.single.path!);
-      print(file!.path);
     } else {
       _showCustomSnackBar("You didn't choose a file");
     }

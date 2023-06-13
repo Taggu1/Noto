@@ -21,7 +21,6 @@ class AppTaskAdapter extends TypeAdapter<AppTask> {
       color: fields[6] as String?,
       reminder: fields[1] as String?,
       createdAt: fields[8] as String,
-      done: fields[7] as bool,
       title: fields[0] as String,
       tag: fields[2] as String?,
       repeatedDays: (fields[11] as List).cast<int>(),
@@ -35,7 +34,7 @@ class AppTaskAdapter extends TypeAdapter<AppTask> {
   @override
   void write(BinaryWriter writer, AppTask obj) {
     writer
-      ..writeByte(12)
+      ..writeByte(11)
       ..writeByte(0)
       ..write(obj.title)
       ..writeByte(1)
@@ -50,8 +49,6 @@ class AppTaskAdapter extends TypeAdapter<AppTask> {
       ..write(obj.group)
       ..writeByte(6)
       ..write(obj.color)
-      ..writeByte(7)
-      ..write(obj.done)
       ..writeByte(8)
       ..write(obj.createdAt)
       ..writeByte(9)

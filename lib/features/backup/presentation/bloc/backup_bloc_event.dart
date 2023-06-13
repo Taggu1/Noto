@@ -12,6 +12,7 @@ class BackupEvent extends BackupBlocEvent {
 
   const BackupEvent({required this.backUpData});
 
+  @override
   List<Object> get props => [backUpData];
 }
 
@@ -20,5 +21,6 @@ class RestoreEvent extends BackupBlocEvent {
 
   const RestoreEvent({required this.backUpData});
 
+  @override
   List<Object> get props => [backUpData];
 }

@@ -35,6 +35,7 @@ class MyColorpickerState extends State<MyColorpicker> {
                       children: [
                         GestureDetector(
                           child: Stack(
+                            alignment: Alignment.center,
                             children: [
                               Container(
                                 height: 70,
@@ -50,17 +51,16 @@ class MyColorpickerState extends State<MyColorpicker> {
                                       backgroundColor: Colors.white,
                                       child: CircleAvatar(
                                         radius: 20,
+                                        backgroundColor: Colors.blue,
                                         child: Icon(
                                           Icons.check,
                                           color: Colors.black,
                                         ),
-                                        backgroundColor: Colors.blue,
                                         // backgroundImage: Icon(Icons.check),
                                       ),
                                     )
                                   : Container()
                             ],
-                            alignment: Alignment.center,
                           ),
                           onTap: () {
                             setState(() {
@@ -86,11 +86,11 @@ class MyColorpickerState extends State<MyColorpicker> {
                                       backgroundColor: Colors.white,
                                       child: CircleAvatar(
                                         radius: 20,
+                                        backgroundColor: Colors.green,
                                         child: Icon(
                                           Icons.check,
                                           color: Colors.black,
                                         ),
-                                        backgroundColor: Colors.green,
                                         // backgroundImage: Icon(Icons.check),
                                       ),
                                     )
@@ -121,11 +121,11 @@ class MyColorpickerState extends State<MyColorpicker> {
                                       backgroundColor: Colors.white,
                                       child: CircleAvatar(
                                         radius: 20,
+                                        backgroundColor: Colors.red,
                                         child: Icon(
                                           Icons.check,
                                           color: Colors.black,
                                         ),
-                                        backgroundColor: Colors.red,
                                         // backgroundImage: Icon(Icons.check),
                                       ),
                                     )
@@ -156,11 +156,11 @@ class MyColorpickerState extends State<MyColorpicker> {
                                       backgroundColor: Colors.white,
                                       child: CircleAvatar(
                                         radius: 20,
+                                        backgroundColor: Colors.yellow,
                                         child: Icon(
                                           Icons.check,
                                           color: Colors.black,
                                         ),
-                                        backgroundColor: Colors.yellow,
                                         // backgroundImage: Icon(Icons.check),
                                       ),
                                     )
@@ -191,11 +191,11 @@ class MyColorpickerState extends State<MyColorpicker> {
                                       backgroundColor: Colors.white,
                                       child: CircleAvatar(
                                         radius: 20,
+                                        backgroundColor: Colors.purple,
                                         child: Icon(
                                           Icons.check,
                                           color: Colors.black,
                                         ),
-                                        backgroundColor: Colors.purple,
                                         // backgroundImage: Icon(Icons.check),
                                       ),
                                     )

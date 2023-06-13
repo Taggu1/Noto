@@ -4,7 +4,6 @@ import 'package:note_app/features/auth/presentation/widgets/signup_or_login_butt
 
 import '../../../../core/utils/auth_utils.dart';
 import '../../../../core/utils/widgets_extentions.dart';
-import '../../../../core/widgets/buttons/custom_elevated_button.dart';
 import '../../../todo/presentation/widgets/sheet_text_field.dart';
 import '../auth/auth_bloc.dart';
 import 'auth_form_title.dart';
@@ -83,6 +82,7 @@ class _SignUpOrLoginFormState extends State<SignUpOrLoginForm> {
               if (value != _passwordController.text) {
                 return "Passwords are not the same";
               }
+              return null;
             },
           ),
         addVerticalSpace(30),

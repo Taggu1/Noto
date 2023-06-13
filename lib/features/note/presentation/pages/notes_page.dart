@@ -23,14 +23,11 @@ class NotesPage extends StatefulWidget {
 class _NotesPageState extends State<NotesPage> {
   bool _toggleMode = false;
 
-  List<String> _toggledNotesIndexes = [];
-
-  late ScrollController _scrollController;
+  final List<String> _toggledNotesIndexes = [];
 
   @override
   void initState() {
     super.initState();
-    _scrollController = ScrollController();
   }
 
   @override
@@ -48,7 +45,7 @@ class _NotesPageState extends State<NotesPage> {
                     onDelete: _onDelete,
                   )
                 : const AppSearchBar(),
-            SelectFolderWidget(),
+            const SelectFolderWidget(),
             Padding(
               padding: const EdgeInsets.all(8.0),
               child: Material(
@@ -132,11 +129,12 @@ class _NotesPageState extends State<NotesPage> {
 
     Future.delayed(
       const Duration(
-        milliseconds: 200,
+        seconds: 1,
       ),
       () {
-        BlocProvider.of<NoteBloc>(context).add(FetchNotesEvent());
         _offToggleMode();
+
+        BlocProvider.of<NoteBloc>(context).add(const FetchNotesEvent());
       },
     );
   }

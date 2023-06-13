@@ -25,7 +25,6 @@ class ThemeCubit extends Cubit<ThemeState> {
 
   saveTheme({required Theme theme}) {
     final unitOrFailure = saveThemeUseCase(theme: theme);
-    print(state.theme == theme);
     emit(
       unitOrFailure.fold(
         (faiure) => state,

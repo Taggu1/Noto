@@ -6,7 +6,6 @@ import 'package:note_app/features/habits/presentation/habit_bloc/habit_bloc.dart
 
 import '../../../../core/widgets/loading_widget.dart';
 import '../../../../core/widgets/no_data_widget.dart';
-import '../../../todo/presentation/tasks/tasks_bloc.dart';
 import '../widgets/habits_widget.dart';
 
 class HabitPage extends StatelessWidget {

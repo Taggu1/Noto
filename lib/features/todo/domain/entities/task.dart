@@ -1,7 +1,5 @@
 import 'package:hive/hive.dart';
 
-import 'package:equatable/equatable.dart';
-
 import '../../../../core/models/item.dart';
 
 part 'task.g.dart';
@@ -29,9 +27,6 @@ class AppTask extends Item {
   @HiveField(6)
   final String? color;
 
-  @HiveField(7)
-  final bool done;
-
   @HiveField(8)
   final String createdAt;
 
@@ -49,7 +44,6 @@ class AppTask extends Item {
     this.color,
     this.reminder,
     required this.createdAt,
-    required this.done,
     required this.title,
     this.tag,
     this.repeatedDays = const [],
@@ -60,12 +54,8 @@ class AppTask extends Item {
   });
 
   AppTask copyWith(
-      {bool? done,
-      String? createdAt,
-      List<String>? doneDates,
-      List<int>? repeatedDays}) {
+      {String? createdAt, List<String>? doneDates, List<int>? repeatedDays}) {
     return AppTask(
-      done: done ?? this.done,
       title: title,
       id: id,
       tag: tag,
@@ -77,6 +67,14 @@ class AppTask extends Item {
       createdAt: createdAt ?? this.createdAt,
       doneDates: doneDates ?? this.doneDates,
       repeatedDays: repeatedDays ?? this.repeatedDays,
+    );
+  }
+
+  factory AppTask.fromFirebase(Map<String, dynamic> json) {
+    return AppTask(
+      createdAt: json["createdAt"],
+      title: json["title"],
+      id: json["id"],
     );
   }
 

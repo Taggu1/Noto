@@ -36,7 +36,7 @@ class AppSearchBar extends StatelessWidget {
                     style: BorderStyle.none,
                   ),
                 ),
-                contentPadding: EdgeInsets.all(16),
+                contentPadding: const EdgeInsets.all(16),
                 prefixIcon: IconButton(
                   icon: const Icon(
                     Icons.menu,

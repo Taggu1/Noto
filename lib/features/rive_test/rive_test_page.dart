@@ -26,14 +26,12 @@ class _RiveTestState extends State<RiveTest> {
     return Scaffold(
       backgroundColor: kBlackColor,
       body: Center(
-        child: Container(
-          child: IconButton(
-            onPressed: _hitBump,
-            icon: RiveAnimation.asset(
-              'assets/delivery.riv',
-              fit: BoxFit.contain,
-              onInit: _onRiveInit,
-            ),
+        child: IconButton(
+          onPressed: _hitBump,
+          icon: RiveAnimation.asset(
+            'assets/delivery.riv',
+            fit: BoxFit.contain,
+            onInit: _onRiveInit,
           ),
         ),
       ),
