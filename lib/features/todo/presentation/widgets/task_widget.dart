@@ -92,10 +92,8 @@ class TaskWidget extends StatelessWidget {
 
   void _toggleDone(BuildContext context) {
     List<String> doneDays = task.doneDates;
-    print(doneDays);
     final stringDate = date.toDateString();
     final done = doneDays.contains(stringDate);
-    print(done);
     if (done) {
       doneDays.remove(stringDate);
     } else {
@@ -158,7 +156,7 @@ class TaskTimeTextWidget extends StatelessWidget {
       style: GoogleFonts.robotoCondensed(
         fontSize: 16,
         color: DateTime.now().isAfterDate(
-          dateTimeFromString(dateTimeString: reminder!),
+          taskDateFromString(dateTimeString: reminder!),
         )
             ? Colors.teal
             : kBlackColor,

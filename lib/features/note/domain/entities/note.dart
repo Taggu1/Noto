@@ -72,6 +72,8 @@ class Note extends Equatable with HiveObjectMixin {
       id: id,
       time: time,
       color: color,
+      points: points,
+      drawing: drawing,
       externalImagePath: externalImagePath,
       folderName: folderName ?? this.folderName,
     );

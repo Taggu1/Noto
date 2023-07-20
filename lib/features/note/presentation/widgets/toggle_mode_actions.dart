@@ -19,7 +19,7 @@ class ToggleModeActions extends StatelessWidget {
     return Container(
       height: 75,
       width: double.infinity,
-      color: Theme.of(context).focusColor,
+      color: Theme.of(context).canvasColor,
       child: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 20),
         child: Row(

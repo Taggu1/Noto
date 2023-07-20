@@ -1,11 +1,7 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
-import 'package:fluttericon/font_awesome5_icons.dart';
-import 'package:note_app/features/auth/presentation/auth/auth_bloc.dart';
 import 'package:note_app/features/note/presentation/folder/folder_cubit.dart';
-import 'package:note_app/features/note/presentation/note/note_bloc.dart';
 
 import '../../domain/entities/note.dart';
 import 'note_widget.dart';
@@ -36,63 +32,8 @@ class _NotesWidgetState extends State<NotesWidget> {
   void initState() {
     super.initState();
 
-    final authState = BlocProvider.of<AuthBloc>(context).state;
-
-    if (authState is AuthenticatedAuthState) {
-      userId = authState.user.id;
-      folderName = BlocProvider.of<FolderCubit>(context).state.currentName;
-      _watchNoteChanges(folderName);
-    }
+    folderName = BlocProvider.of<FolderCubit>(context).state.currentName;
   }
-
-  void _watchNoteChanges(String folderName) {
-    FirebaseFirestore.instance
-        .collection("notes")
-        .where(
-          "userId",
-          isEqualTo: userId,
-        )
-        .orderBy("index", descending: true)
-        .snapshots()
-        .listen((event) {
-      if (mounted && event.docChanges.isNotEmpty) {
-        final change = event.docChanges.last;
-
-        final noteDoc = change.doc;
-
-        final note = Note.fromFirebase(
-          noteDoc.data()!,
-          change.doc.id,
-        );
-
-        switch (change.type) {
-          case DocumentChangeType.added || DocumentChangeType.modified:
-            if (!widget.notes.contains(note)) {
-              BlocProvider.of<NoteBloc>(context).add(
-                EditOrAddNoteEvent(note: note),
-              );
-
-              BlocProvider.of<NoteBloc>(context).add(
-                FetchNotesEvent(folderName: folderName),
-              );
-            }
-
-          case DocumentChangeType.removed:
-            if (widget.notes.contains(note)) {
-              BlocProvider.of<NoteBloc>(context).add(
-                RemoveNoteEvent(noteId: noteDoc.id),
-              );
-
-              BlocProvider.of<NoteBloc>(context).add(
-                FetchNotesEvent(folderName: folderName),
-              );
-            }
-        }
-      }
-    });
-  }
-
-  void _fetchNotes() {}
 
   @override
   Widget build(BuildContext context) {

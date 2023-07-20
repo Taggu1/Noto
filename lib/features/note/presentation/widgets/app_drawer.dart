@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:fluttericon/font_awesome5_icons.dart';
 import 'package:note_app/core/constants/theme_constants.dart';
 import 'package:note_app/core/utils/widgets_extentions.dart';
-import 'package:note_app/features/auth/presentation/pages/sync_page.dart';
 import 'package:note_app/features/note/presentation/pages/notes_page.dart';
 import 'package:note_app/features/theme/presentation/pages/settings_page.dart';
 
@@ -42,8 +41,6 @@ class AppDrawer extends StatelessWidget {
               _buildPageButton(
                   context, BackupPage.routeName, "Backup", Icons.backup, false),
               addVerticalSpace(10),
-              _buildPageButton(
-                  context, SyncPage.routeName, "Sync", Icons.sync, false),
             ],
           ),
         ),

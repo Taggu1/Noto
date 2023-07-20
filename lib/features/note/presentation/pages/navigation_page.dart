@@ -7,7 +7,6 @@ import 'package:note_app/features/todo/domain/entities/task.dart';
 import 'package:note_app/features/todo/presentation/pages/tasks_page.dart';
 import 'package:note_app/features/todo/presentation/widgets/add_item_sheet.dart';
 
-import '../../../auth/presentation/auth/auth_bloc.dart';
 import '../widgets/app_drawer.dart';
 import 'edit_add_note_page.dart';
 
@@ -30,13 +29,6 @@ class _NavigationPageState extends State<NavigationPage> {
   @override
   void initState() {
     super.initState();
-    final authState = BlocProvider.of<AuthBloc>(context).state;
-    if (authState is AuthenticatedAuthState) {
-      return;
-    }
-    BlocProvider.of<AuthBloc>(context).add(
-      FetchUserAuthEvent(),
-    );
   }
 
   @override

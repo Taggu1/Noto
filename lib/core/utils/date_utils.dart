@@ -3,7 +3,6 @@ import 'package:intl/intl.dart';
 
 extension DateTimeExt on DateTime {
   String toDateTimeString() {
-    print(this);
     return DateFormat("MMM d, h:mm a").format(this);
   }
 
@@ -16,9 +15,20 @@ extension DateTimeExt on DateTime {
   }
 }
 
+DateTime taskDateFromString({required String dateTimeString}) {
+  final date = DateFormat("EEEE, MMM d").parse(dateTimeString);
+
+  return DateTime(
+    DateTime.now().year,
+    date.month,
+    date.day,
+    date.hour,
+    date.minute,
+  );
+}
+
 DateTime dateTimeFromString({required String dateTimeString}) {
   final date = DateFormat("MMM d, h:mm a").parse(dateTimeString);
-  print(date.year);
 
   return DateTime(
     DateTime.now().year,

@@ -19,7 +19,6 @@ class TasksRepositoryImpl extends TasksRepository {
 
       return const Right(unit);
     } catch (e) {
-      print(e);
       return Left(
         DatabaseFailure(),
       );

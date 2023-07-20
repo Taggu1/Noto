@@ -70,13 +70,11 @@ class _AddItemSheetState extends State<AddItemSheet> {
     _selectedColor = task.color?.toMaterialColor();
     _id = task.id;
     _descriptionController.text = task.description ?? "";
-    print("S" + "${task.repeated}");
     _repeated = task.repeated;
     _selectedReapeatedDays = task.repeatedDays;
   }
 
   void setOldHabit(Habit habit) {
-    print(habit.time);
     _time = timeFromSting(string: habit.time);
     _selectedReapeatedDays = habit.habitDays;
     _titleController.text = habit.name;
@@ -103,7 +101,7 @@ class _AddItemSheetState extends State<AddItemSheet> {
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               SheetTitleRow(
-                text: "Add To-do",
+                text: widget.isTask ? "Add To-do" : "Add habit",
                 add: _add,
               ),
               const SizedBox(
@@ -113,7 +111,8 @@ class _AddItemSheetState extends State<AddItemSheet> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   SheetTextField(
-                    hintText: "New To-do title",
+                    hintText:
+                        widget.isTask ? "New To-do title" : "New habit name",
                     controller: _titleController,
                   ),
                   const SizedBox(
@@ -189,8 +188,8 @@ class _AddItemSheetState extends State<AddItemSheet> {
         // ),
         IconButton(
           onPressed: () => _repeatedDays(),
-          icon: const Icon(
-            Icons.repeat,
+          icon: Icon(
+            widget.isTask ? Icons.repeat : Icons.free_cancellation,
           ),
         ),
 
@@ -237,7 +236,6 @@ class _AddItemSheetState extends State<AddItemSheet> {
 
   void _addTask(BuildContext context, AppTask? oldTask) {
     if (_titleController.text.isNotEmpty) {
-      print(_repeated);
       BlocProvider.of<TasksBloc>(context).add(
         EditOrAddTaskEvent(
           task: AppTask(
@@ -286,10 +284,10 @@ class _AddItemSheetState extends State<AddItemSheet> {
         ),
         builder: (ctx) {
           return SelectDaysWidget(
-            title: "Select free days",
             addDay: _addOrRemoveRepeatedDay,
             selectedReapeatedDays: _selectedReapeatedDays,
             selectAll: _selectAllDays,
+            title: widget.isTask ? "Add repeated days" : "Add free days",
           );
         });
   }

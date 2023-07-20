@@ -1,7 +1,6 @@
 import 'package:dynamic_color/dynamic_color.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:note_app/features/auth/presentation/pages/sync_page.dart';
 import 'package:note_app/features/backup/presentation/bloc/backup_bloc_bloc.dart';
 import 'package:note_app/features/backup/presentation/pages/backup_page.dart';
 import 'package:note_app/features/habits/presentation/habit_bloc/habit_bloc.dart';
@@ -14,7 +13,6 @@ import 'package:note_app/features/todo/presentation/tasks/tasks_bloc.dart';
 
 import 'dart:io' show Platform;
 
-import 'features/auth/presentation/auth/auth_bloc.dart';
 import 'features/theme/presentation/theme/theme_cubit.dart';
 import 'injection_container.dart' as di;
 
@@ -70,7 +68,6 @@ class MyApp extends StatelessWidget {
               const FetchNotesEvent(),
             ),
         ),
-        BlocProvider(create: (ctx) => di.sl<AuthBloc>()),
       ],
       child: BlocBuilder<ThemeCubit, ThemeState>(
         builder: (context, state) {
@@ -112,7 +109,6 @@ class MyApp extends StatelessWidget {
                 '/': (ctx) => const NavigationPage(),
                 BackupPage.routeName: (ctx) => const BackupPage(),
                 SettingsPage.routeName: (ctx) => const SettingsPage(),
-                SyncPage.routeName: (ctx) => const SyncPage(),
               },
             );
           });

@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:note_app/core/constants/colors.dart';
 import 'package:note_app/core/utils/date_utils.dart';
 import 'package:note_app/core/utils/string.dart';
 import 'package:note_app/features/habits/presentation/habit_bloc/habit_bloc.dart';
@@ -16,9 +15,10 @@ class HabitWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.symmetric(
-        horizontal: 5,
-        vertical: 22,
+      padding: const EdgeInsets.only(
+        left: 5,
+        right: 5,
+        top: 30,
       ),
       child: InkWell(
         borderRadius: BorderRadius.circular(12),
@@ -37,7 +37,7 @@ class HabitWidget extends StatelessWidget {
           width: double.infinity,
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(12),
-            color: kSurfaceColor,
+            color: Theme.of(context).colorScheme.onInverseSurface,
           ),
           child: Column(
             children: [
@@ -52,17 +52,17 @@ class HabitWidget extends StatelessWidget {
                         overflow: TextOverflow.ellipsis,
                         maxLines: 2,
                         softWrap: false,
-                        style: const TextStyle(
-                          color: Colors.white,
+                        style: TextStyle(
+                          color: habit.color.toMaterialColor(),
                           fontSize: 20,
-                          fontWeight: FontWeight.bold,
+                          fontWeight: FontWeight.w600,
                         ),
                       ),
                     ),
                     Text(
                       "${habit.doneDates.length}x",
-                      style: const TextStyle(
-                        color: Colors.white,
+                      style: TextStyle(
+                        color: habit.color.toMaterialColor(),
                         fontSize: 20,
                         fontWeight: FontWeight.bold,
                       ),
@@ -71,7 +71,7 @@ class HabitWidget extends StatelessWidget {
                 ),
               ),
               const SizedBox(
-                height: 10,
+                height: 15,
               ),
               SizedBox(
                 width: double.infinity,
@@ -102,7 +102,7 @@ class HabitWidget extends StatelessWidget {
                 ),
               ),
               const SizedBox(
-                height: 10,
+                height: 15,
               ),
             ],
           ),

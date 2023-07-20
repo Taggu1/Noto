@@ -95,6 +95,14 @@ class _EditAddNotePageState extends State<EditAddNotePage> {
         _folderName = currentFolderName;
       }
 
+      _titleController.addListener(() {
+        _add();
+      });
+
+      _bodyController.addListener(() {
+        _add();
+      });
+
       _loaded = true;
     }
     super.didChangeDependencies();
@@ -150,11 +158,8 @@ class _EditAddNotePageState extends State<EditAddNotePage> {
       leading: CustomIconButton(
         icon: Icons.arrow_back,
         onPressed: () {
-          if (widget.isAdd == false) {
-            _add();
-          } else {
-            Navigator.of(context).pop();
-          }
+          _add();
+          Navigator.of(context).pop();
         },
       ),
       actions: [
@@ -164,13 +169,6 @@ class _EditAddNotePageState extends State<EditAddNotePage> {
             onPressed: () {
               _removeNote(_id);
             },
-          ),
-        if (widget.isAdd == true)
-          CustomIconButton(
-            onPressed: () {
-              _add();
-            },
-            icon: Icons.add,
           ),
         CustomIconButton(
           onPressed: _showColorsBottomSheet,
@@ -242,7 +240,6 @@ class _EditAddNotePageState extends State<EditAddNotePage> {
         folderName: _folderName,
       ),
     );
-    Navigator.of(context).pop();
   }
 
   _showColorsBottomSheet() {

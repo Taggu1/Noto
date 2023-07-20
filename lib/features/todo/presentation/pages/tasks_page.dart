@@ -139,7 +139,6 @@ class _TasksPageState extends State<TasksPage> {
     }
 
     if (_toggleMode == false) {
-      print("FUCK");
       _toggleMode = true;
     } else if (_toggleIndexesMap.isEmpty) {
       _toggleMode = false;

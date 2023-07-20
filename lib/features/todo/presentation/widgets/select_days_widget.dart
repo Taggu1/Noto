@@ -39,7 +39,7 @@ class _SelectDaysWidgetState extends State<SelectDaysWidget> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: 200,
+      height: 180,
       child: Padding(
         padding: const EdgeInsets.symmetric(vertical: 16),
         child: Column(
@@ -84,7 +84,9 @@ class _SelectDaysWidgetState extends State<SelectDaysWidget> {
                   children: mapWeekDayNumToString.keys
                       .map(
                         (index) => ChoiceChip(
-                          label: Text(mapWeekDayNumToString[index] ?? ""),
+                          label: Text(
+                              mapWeekDayNumToString[index]?.split("").first ??
+                                  ""),
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.only(
                               bottomLeft: Radius.circular(index == 1 ? 12 : 0),
